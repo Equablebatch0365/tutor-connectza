@@ -1,9 +1,8 @@
 // src/lib/supabase.ts
 import { createClient } from '@supabase/supabase-js'
 
-// TEMPORARY: These are hardcoded just to get the live site working
-// We will move them back to .env later!
-const supabaseUrl = 'https://bihntnjyiubxbsunsn.supabase.co'
-const supabaseAnonKey = 'sb_publishable_9lPZq7QKfKHJKGEk70rmfw_e0YsqRTS'
+// Reading from the new plain names
+const supabaseUrl = import.meta.env.SUPABASE_URL
+const supabaseAnonKey = import.meta.env.SUPABASE_ANON_KEY
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
