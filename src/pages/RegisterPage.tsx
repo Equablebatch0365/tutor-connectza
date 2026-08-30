@@ -1,12 +1,14 @@
 // src/pages/RegisterPage.tsx
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // <--- Imported useNavigate
+import { Link, useNavigate } from 'react-router-dom';
+import { supabase } from '../lib/supabase';
+import { useLanguage } from '../context/useLanguage';
 
 type UserRole = 'learner' | 'tutor';
 
 function RegisterPage() {
-    // Hook to change URL
     const navigate = useNavigate();
+    const { t } = useLanguage();
 
     const [role, setRole] = useState<UserRole>('learner');
 
@@ -21,7 +23,7 @@ function RegisterPage() {
     const [subjects, setSubjects] = useState('');
     const [experience, setExperience] = useState('');
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!email.includes('@') || password.length < 6) {
@@ -29,22 +31,51 @@ function RegisterPage() {
             return;
         }
 
-        // In the future, this is where we will save this to a real database.
-        console.log("Registering as:", role, name, email);
+        const { data: authData, error: authError } = await supabase.auth.signUp({
+            email,
+            password,
+        });
 
-        // USE NAVIGATE: Send them to the correct dashboard based on their role
-        if (role === 'learner') {
-            navigate('/learner-dashboard');
-        } else {
-            navigate('/tutor-dashboard');
+        if (authError) {
+            setError(authError.message);
+            return;
         }
+
+        if (authData.user) {
+            const { error: profileError } = await supabase
+                .from('profiles')
+                .insert([
+                    {
+                        id: authData.user.id,
+                        full_name: name,
+                        role: role,
+                        grade: role === 'learner' ? grade : null,
+                        province: role === 'learner' ? province : null,
+                        subjects: role === 'tutor' ? subjects.split(',').map(s => s.trim()) : null,
+                        experience: role === 'tutor' ? experience : null,
+                    }
+                ]);
+
+            if (profileError) {
+                setError(profileError.message);
+                return;
+            }
+        }
+
+        // Sign them in immediately and take them to their dashboard
+        await supabase.auth.signInWithPassword({
+            email,
+            password,
+        });
+
+        navigate(role === 'learner' ? '/learner-dashboard' : '/tutor-dashboard');
     };
 
     return (
         <div className="auth-container">
             <div className="auth-card register-card">
-                <h2>Create your account</h2>
-                <p>Choose your role to get started.</p>
+                <h2>{t.createAccount}</h2>
+                <p>{t.chooseRole}</p>
 
                 <div className="role-selector">
                     <button
@@ -52,20 +83,20 @@ function RegisterPage() {
                         className={`role-btn ${role === 'learner' ? 'active' : ''}`}
                         onClick={() => setRole('learner')}
                     >
-                        🎓 I am a Learner
+                        🎓 {t.iAmLearner}
                     </button>
                     <button
                         type="button"
                         className={`role-btn ${role === 'tutor' ? 'active' : ''}`}
                         onClick={() => setRole('tutor')}
                     >
-                        💼 I am a Tutor
+                        💼 {t.iAmTutor}
                     </button>
                 </div>
 
                 <form onSubmit={handleSubmit} className="auth-form">
                     <div className="form-group">
-                        <label>Full Name</label>
+                        <label>{t.fullName}</label>
                         <input
                             type="text"
                             placeholder={role === 'learner' ? "e.g. Thabo Nkosi" : "e.g. Ms. Sarah van Wyk"}
@@ -75,7 +106,7 @@ function RegisterPage() {
                     </div>
 
                     <div className="form-group">
-                        <label>Email Address</label>
+                        <label>{t.email}</label>
                         <input
                             type="email"
                             placeholder="you@example.com"
@@ -85,7 +116,7 @@ function RegisterPage() {
                     </div>
 
                     <div className="form-group">
-                        <label>Password</label>
+                        <label>{t.createPassword}</label>
                         <input
                             type="password"
                             placeholder="Create a password"
@@ -97,19 +128,19 @@ function RegisterPage() {
                     {role === 'learner' && (
                         <>
                             <div className="form-group">
-                                <label>Current Grade</label>
+                                <label>{t.currentGrade}</label>
                                 <select value={grade} onChange={(e) => setGrade(e.target.value)}>
-                                    <option value="">Select Grade</option>
-                                    <option value="10">Grade 10</option>
-                                    <option value="11">Grade 11</option>
-                                    <option value="12">Grade 12 (Matric)</option>
+                                    <option value="">{t.selectGrade}</option>
+                                    <option value="10">{t.grade10}</option>
+                                    <option value="11">{t.grade11}</option>
+                                    <option value="12">{t.grade12}</option>
                                 </select>
                             </div>
 
                             <div className="form-group">
-                                <label>Province</label>
+                                <label>{t.province}</label>
                                 <select value={province} onChange={(e) => setProvince(e.target.value)}>
-                                    <option value="">Select Province</option>
+                                    <option value="">{t.selectProvince}</option>
                                     <option value="Gauteng">Gauteng</option>
                                     <option value="Western Cape">Western Cape</option>
                                     <option value="KwaZulu-Natal">KwaZulu-Natal</option>
@@ -127,7 +158,7 @@ function RegisterPage() {
                     {role === 'tutor' && (
                         <>
                             <div className="form-group">
-                                <label>Subjects you can teach</label>
+                                <label>{t.subjectsTeach}</label>
                                 <input
                                     type="text"
                                     placeholder="e.g. Pure Maths, Physical Sciences"
@@ -137,7 +168,7 @@ function RegisterPage() {
                             </div>
 
                             <div className="form-group">
-                                <label>Years of Experience</label>
+                                <label>{t.yearsExp}</label>
                                 <input
                                     type="number"
                                     placeholder="e.g. 3"
@@ -151,12 +182,17 @@ function RegisterPage() {
                     {error && <p className="error-text">{error}</p>}
 
                     <button type="submit" className="primary-btn auth-btn">
-                        {role === 'learner' ? "Sign Up as Learner" : "Sign Up as Tutor"}
+                        {role === 'learner' ? t.signUpLearner : t.signUpTutor}
                     </button>
+
+                    <p className="legal-text">
+                        By continuing, you agree to Supabase’s Terms of Service and Privacy Policy,
+                        and to receive periodic emails with updates.
+                    </p>
                 </form>
 
                 <div className="auth-switch">
-                    <p>Already have an account? <Link to="/login" className="link-btn">Log In</Link></p>
+                    <p>{t.alreadyAccount} <Link to="/login" className="link-btn">{t.logIn}</Link></p>
                 </div>
             </div>
         </div>

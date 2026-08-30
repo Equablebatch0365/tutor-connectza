@@ -1,31 +1,14 @@
 // src/pages/HomePage.tsx
 import { useState } from 'react';
-
-const gatewaySubjects: string[] = [
-    "Pure Maths", "Physical Sciences", "Accounting", "Life Sciences", "English HL", "Geography"
-];
-
-const features: { title: string; description: string }[] = [
-    {
-        title: "Gateway Subject Mastery",
-        description: "Focused tools for the subjects that gatekeep university entrance, helping you secure your dream degree.",
-    },
-    {
-        title: "Affordable by Design",
-        description: "Cutting out the R300+/hour overhead to make quality academic support accessible to every South African family.",
-    },
-    {
-        title: "Data-Light & Local",
-        description: "Built for South Africa. Low data usage, mobile-first, and support for all 11 official languages.",
-    },
-];
+import { useLanguage } from '../context/useLanguage';
 
 function HomePage() {
+    const { t } = useLanguage();
+
     const [email, setEmail] = useState<string>('');
     const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
     const [error, setError] = useState<string>('');
 
-    // FIX: Added React. before FormEvent
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (!email.includes('@') || !email.includes('.')) {
@@ -38,18 +21,15 @@ function HomePage() {
 
     return (
         <>
+            {/* Hero Section */}
             <main className="hero">
                 <div className="hero-text">
-                    <h1>Unlock Your <span className="highlight">University Entrance.</span></h1>
-                    <p>
-                        Over 700,000 students qualified for tertiary study last year, but hundreds of thousands were
-                        turned away. We are building an affordable, localized platform to help you ace the
-                        critical gateway subjects that stand between you and your future.
-                    </p>
+                    <h1>{t.unlockTitle}</h1>
+                    <p>{t.unlockSubtitle}</p>
 
                     <div className="hero-buttons">
-                        <a href="#waitlist" className="primary-btn">Join the Waitlist</a>
-                        <a href="#subjects" className="secondary-btn">Explore Subjects</a>
+                        <a href="#waitlist" className="primary-btn">{t.joinWaitlist}</a>
+                        <a href="#subjects" className="secondary-btn">{t.exploreSubjects}</a>
                     </div>
                 </div>
 
@@ -63,22 +43,22 @@ function HomePage() {
                 <div className="waitlist-card">
                     {isSubmitted ? (
                         <div className="success-message">
-                            <h2>🎉 You're on the list!</h2>
-                            <p>Thanks for joining, <strong>{email}</strong>. We'll let you know the moment we launch!</p>
+                            <h2>🎉 {t.thankYou}</h2>
+                            <p>{email}</p>
                         </div>
                     ) : (
                         <>
-                            <h2>Be the first to know.</h2>
-                            <p>Join our waitlist to get early access when we launch.</p>
+                            <h2>{t.beFirst}</h2>
+                            <p>{t.joinDescription}</p>
                             <form onSubmit={handleSubmit} className="waitlist-form">
                                 <input
                                     type="email"
-                                    placeholder="Enter your email address"
+                                    placeholder={t.enterEmail}
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     className="email-input"
                                 />
-                                <button type="submit" className="primary-btn submit-btn">Join Waitlist</button>
+                                <button type="submit" className="primary-btn submit-btn">{t.joinWaitlist}</button>
                             </form>
                             {error && <p className="error-text">{error}</p>}
                         </>
@@ -88,27 +68,34 @@ function HomePage() {
 
             {/* Critical Subjects Section */}
             <section id="subjects" className="subjects-section">
-                <h2 className="section-title">The Subjects That Matter</h2>
-                <p className="section-subtitle">Mastering these opens the doors to Engineering, Medicine, Commerce, and Law.</p>
+                <h2 className="section-title">{t.subjectsMatter}</h2>
+                <p className="section-subtitle">{t.subjectsSubtitle}</p>
                 <div className="subject-grid">
-                    {gatewaySubjects.map((subject) => (
-                        <div className="subject-card" key={subject}>
-                            {subject}
-                        </div>
-                    ))}
+                    <div className="subject-card">Pure Maths</div>
+                    <div className="subject-card">Physical Sciences</div>
+                    <div className="subject-card">Accounting</div>
+                    <div className="subject-card">Life Sciences</div>
+                    <div className="subject-card">English HL</div>
+                    <div className="subject-card">Geography</div>
                 </div>
             </section>
 
             {/* The Solution Section */}
             <section className="stats-section">
-                <h2 className="section-title">What we are building for you</h2>
+                <h2 className="section-title">{t.whatBuilding}</h2>
                 <div className="feature-grid">
-                    {features.map((feature) => (
-                        <div className="feature-card" key={feature.title}>
-                            <h3>{feature.title}</h3>
-                            <p>{feature.description}</p>
-                        </div>
-                    ))}
+                    <div className="feature-card">
+                        <h3>{t.gatewayMastery}</h3>
+                        <p>{t.gatewayMasteryDesc}</p>
+                    </div>
+                    <div className="feature-card">
+                        <h3>{t.affordableDesign}</h3>
+                        <p>{t.affordableDesignDesc}</p>
+                    </div>
+                    <div className="feature-card">
+                        <h3>{t.dataLight}</h3>
+                        <p>{t.dataLightDesc}</p>
+                    </div>
                 </div>
             </section>
         </>

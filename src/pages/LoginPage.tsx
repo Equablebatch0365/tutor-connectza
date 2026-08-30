@@ -1,21 +1,22 @@
 // src/pages/LoginPage.tsx
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { supabase } from '../lib/supabase';
+import { useLanguage } from '../context/useLanguage';
 
 type UserRole = 'learner' | 'tutor';
 
 function LoginPage() {
     const navigate = useNavigate();
+    const { t } = useLanguage(); // <--- Use translations
 
-    // Removed unused isSignUp state
     const [role, setRole] = useState<UserRole>('learner');
 
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [error, setError] = useState<string>('');
 
-    // FIX: Added React. before FormEvent
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!email.includes('@') || password.length < 6) {
@@ -23,42 +24,59 @@ function LoginPage() {
             return;
         }
 
-        console.log("Logging in as:", role);
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+        });
 
-        if (role === 'learner') {
-            navigate('/learner-dashboard');
-        } else {
-            navigate('/tutor-dashboard');
+        if (error) {
+            setError(error.message);
+            return;
+        }
+
+        if (data.user) {
+            const { data: profileData, error: profileError } = await supabase
+                .from('profiles')
+                .select('role')
+                .eq('id', data.user.id)
+                .single();
+
+            if (profileError) {
+                setError(profileError.message);
+                return;
+            }
+
+            navigate(profileData.role === 'tutor' ? '/tutor-dashboard' : '/learner-dashboard');
         }
     };
 
     return (
         <div className="auth-container">
             <div className="auth-card">
-                <h2>Log In</h2>
-                <p>Select your role to continue.</p>
+                <h2>{t.logIn}</h2>
+                <p>{t.selectRole}</p>
 
-                {/* Mock Role Selector for testing */}
+                {/* Mock Role Selector */}
                 <div className="role-selector">
                     <button
                         type="button"
                         className={`role-btn ${role === 'learner' ? 'active' : ''}`}
                         onClick={() => setRole('learner')}
                     >
-                        🎓 Learner
+                        🎓 {t.learner}
                     </button>
                     <button
                         type="button"
                         className={`role-btn ${role === 'tutor' ? 'active' : ''}`}
                         onClick={() => setRole('tutor')}
                     >
-                        💼 Tutor
+                        💼 {t.tutor}
                     </button>
                 </div>
 
                 <form onSubmit={handleSubmit} className="auth-form">
                     <div className="form-group">
-                        <label>Email Address</label>
+                        <label>{t.email}</label>
                         <input
                             type="email"
                             placeholder="you@example.com"
@@ -68,7 +86,7 @@ function LoginPage() {
                     </div>
 
                     <div className="form-group">
-                        <label>Password</label>
+                        <label>{t.password}</label>
                         <input
                             type="password"
                             placeholder="Enter your password"
@@ -80,12 +98,12 @@ function LoginPage() {
                     {error && <p className="error-text">{error}</p>}
 
                     <button type="submit" className="primary-btn auth-btn">
-                        Log In
+                        {t.loginBtn}
                     </button>
                 </form>
 
                 <div className="auth-switch">
-                    <p>Don't have an account? <Link to="/register" className="link-btn">Sign Up</Link></p>
+                    <p>{t.noAccount} <Link to="/register" className="link-btn">{t.signUp}</Link></p>
                 </div>
             </div>
         </div>

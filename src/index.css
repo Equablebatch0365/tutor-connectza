@@ -1,44 +1,16 @@
-/* src/index.css */
-/* At the top of src/index.css */
+/* =========================================
+   GLOBAL STYLES
+   ========================================= */
 body {
   margin: 0;
-  font-family: 'Poppins', sans-serif; /* <--- Changed to Poppins */
+  font-family: 'Poppins', sans-serif;
   background-color: #FDFBF7;
   color: #333333;
 }
 
-/* ... rest of your CSS ... */
-
-/* Update the Logo Styles */
-.logo {
-  font-size: 26px;
-  font-weight: 800; /* Extra bold */
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 8px; /* Space between emoji and text */
-  letter-spacing: -0.5px; /* Tighter spacing looks professional */
-}
-
-.logo-emoji {
-  font-size: 28px;
-  filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.2)); /* Adds a small shadow to the emoji */
-}
-
-/* The "Connect" part */
-.logo span:not(.logo-emoji) {
-  color: #F2A65A; /* Soft Golden Orange */
-}
-
-body {
-  margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #FDFBF7;
-  color: #333333;
-}
-
-/* Navbar */
-/* Navbar */
+/* =========================================
+   NAVBAR
+   ========================================= */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -70,10 +42,9 @@ body {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 15px; /* Reduced gap so they aren't too far apart */
+  gap: 15px;
 }
 
-/* Style for plain text links (like Home) */
 .nav-links a.nav-link {
   color: #FDFBF7;
   text-decoration: none;
@@ -85,7 +56,6 @@ body {
   color: #F2A65A;
 }
 
-/* Style for the button (Log In) */
 .login-btn {
   background: #FDFBF7;
   color: #A64B2A;
@@ -95,7 +65,7 @@ body {
   font-weight: bold;
   cursor: pointer;
   transition: 0.3s;
-  text-decoration: none; /* Removes underline from Link tag */
+  text-decoration: none;
   font-size: 16px;
   display: inline-block;
 }
@@ -105,7 +75,6 @@ body {
   color: #2c2c2c;
 }
 
-/* Style for the new Sign Up button */
 .secondary-btn.nav-signup {
   background-color: transparent;
   color: #FDFBF7;
@@ -123,7 +92,10 @@ body {
   background-color: #FDFBF7;
   color: #A64B2A;
 }
-/* Hero */
+
+/* =========================================
+   HERO SECTION
+   ========================================= */
 .hero {
   display: flex;
   align-items: center;
@@ -161,7 +133,6 @@ body {
   gap: 15px;
 }
 
-/* Buttons (Changed to <a> tags for scrolling) */
 .primary-btn {
   background-color: #A64B2A;
   color: #FDFBF7;
@@ -210,7 +181,9 @@ body {
   box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
-/* WAITLIST SECTION (New Styles) */
+/* =========================================
+   WAITLIST SECTION
+   ========================================= */
 .waitlist-section {
   padding: 60px 20px;
   display: flex;
@@ -277,7 +250,9 @@ body {
   color: #333;
 }
 
-/* Subjects Section */
+/* =========================================
+   SUBJECTS SECTION
+   ========================================= */
 .subjects-section {
   padding: 80px 80px;
   text-align: center;
@@ -319,7 +294,9 @@ body {
   box-shadow: 0 10px 15px rgba(0,0,0,0.1);
 }
 
-/* Features / Solution Section */
+/* =========================================
+   FEATURES SECTION
+   ========================================= */
 .stats-section {
   padding: 80px 80px;
   text-align: center;
@@ -352,24 +329,9 @@ body {
   line-height: 1.5;
   color: #555;
 }
-/* Login Page Styles */
-.login-container {
-  padding: 80px;
-  text-align: center;
-  max-width: 500px;
-  margin: 0 auto;
-}
 
-.login-container h2 {
-  color: #A64B2A;
-  font-size: 32px;
-}
-
-.login-container p {
-  color: #555;
-  margin-bottom: 30px;
-}/* =========================================
-   AUTH (Login/Signup) PAGE STYLES
+/* =========================================
+   AUTH (LOGIN / REGISTER) STYLES
    ========================================= */
 .auth-container {
   min-height: 80vh;
@@ -420,7 +382,7 @@ body {
   font-size: 14px;
 }
 
-.form-group input {
+.form-group input, .form-group select, .form-group textarea {
   width: 100%;
   padding: 12px 15px;
   border: 2px solid #E8DCCB;
@@ -428,9 +390,10 @@ body {
   font-size: 16px;
   box-sizing: border-box;
   outline: none;
+  background-color: white;
 }
 
-.form-group input:focus {
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
   border-color: #A64B2A;
 }
 
@@ -461,8 +424,9 @@ body {
 .link-btn:hover {
   color: #F2A65A;
 }
+
 /* =========================================
-   REGISTER PAGE STYLES
+   REGISTER ROLE SELECTOR
    ========================================= */
 .register-card {
   max-width: 500px;
@@ -495,20 +459,6 @@ body {
   box-shadow: 0 4px 10px rgba(166, 75, 42, 0.3);
 }
 
-.form-group select {
-  width: 100%;
-  padding: 12px 15px;
-  border: 2px solid #E8DCCB;
-  border-radius: 8px;
-  font-size: 16px;
-  background-color: white;
-  outline: none;
-  box-sizing: border-box;
-}
-
-.form-group select:focus {
-  border-color: #A64B2A;
-}
 /* =========================================
    DASHBOARD STYLES
    ========================================= */
@@ -578,7 +528,6 @@ body {
   font-size: 14px;
 }
 
-/* Progress Bar Styles */
 .progress-item {
   margin-bottom: 15px;
 }
@@ -603,7 +552,6 @@ body {
   border-radius: 10px;
 }
 
-/* Earnings Styles */
 .earnings-number {
   font-size: 40px;
   font-weight: 800;
@@ -621,12 +569,6 @@ body {
   margin-top: 20px;
 }
 
-/* Mobile Responsive for Dashboards */
-@media (max-width: 768px) {
-  .dash-grid {
-    grid-template-columns: 1fr;
-  }
-}
 /* =========================================
    FIND A TUTOR PAGE
    ========================================= */
@@ -734,6 +676,7 @@ body {
   font-size: 18px;
   width: 100%;
 }
+
 /* =========================================
    BOOKING MODAL
    ========================================= */
@@ -812,4 +755,331 @@ body {
   font-weight: 600;
   color: #333;
   margin: 15px 0;
+}
+
+/* =========================================
+   MOBILE RESPONSIVE (ALL PAGES)
+   ========================================= */
+@media (max-width: 768px) {
+
+  /* Navbar */
+  .navbar {
+    padding: 15px 20px;
+  }
+  .logo {
+    font-size: 20px;
+  }
+  .logo-emoji {
+    font-size: 22px;
+  }
+  .nav-links {
+    gap: 10px;
+  }
+  .nav-links a.nav-link,
+  .secondary-btn.nav-signup,
+  .login-btn {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  /* Hero */
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    padding: 40px 20px;
+    min-height: auto;
+  }
+  .hero-text h1 {
+    font-size: 32px;
+  }
+  .hero-text p {
+    font-size: 16px;
+    margin-bottom: 25px;
+  }
+  .hero-buttons {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+  .primary-btn, .secondary-btn {
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+  }
+  .hero-image-placeholder {
+    width: 250px;
+    height: 250px;
+    margin-top: 30px;
+  }
+
+  /* Waitlist */
+  .waitlist-section {
+    padding: 40px 20px;
+  }
+  .waitlist-card {
+    padding: 25px;
+  }
+  .waitlist-form {
+    flex-direction: column;
+  }
+  .email-input {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .submit-btn {
+    width: 100%;
+  }
+
+  /* Subjects */
+  .subjects-section {
+    padding: 40px 20px;
+  }
+  .subject-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 cards side by side */
+  }
+
+  /* Features */
+  .stats-section {
+    padding: 40px 20px;
+  }
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Auth (Login & Registration) */
+  .auth-container {
+    padding: 20px;
+    min-height: auto;
+  }
+  .auth-card {
+    padding: 25px;
+  }
+
+  /* Dashboard */
+  .dashboard-container {
+    padding: 30px 20px;
+  }
+  .dash-header h1 {
+    font-size: 28px;
+  }
+  .dash-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Find a Tutor */
+  .find-tutor-container {
+    padding: 40px 20px;
+  }
+  .page-title {
+    font-size: 28px;
+  }
+  .search-bar {
+    flex-direction: column;
+  }
+  .search-input, .province-select {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .tutor-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Modal */
+  .modal-content {
+    width: 90%;
+    padding: 20px;
+  }
+}
+
+/* Hides specific navbar link on small phones */
+@media (max-width: 600px) {
+  .nav-links a.nav-link:nth-child(2) {
+    display: none;
+  }
+}
+/* Legal Text on Login/Register */
+.legal-text {
+  font-size: 11px;
+  color: #888;
+  text-align: center;
+  margin-top: 15px;
+  line-height: 1.5;
+}
+/* Session Request Cards */
+.session-card {
+  background: #FDF0E7;
+  border: 1px solid #E8DCCB;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.session-card p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #555;
+}
+/* Status Colors */
+.status-pending { color: #F2A65A; }
+.status-accepted { color: #4CAF50; }
+.status-declined { color: #D32F2F; }
+
+/* Meeting Details */
+.meeting-details {
+  margin-top: 10px;
+  border-top: 1px solid #ddd;
+  padding-top: 10px;
+}
+
+.meeting-details a {
+  color: #A64B2A;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+/* Response Buttons */
+.respond-btn {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.modal-actions .primary-btn {
+  flex: 1;
+}
+
+.modal-actions .cancel-btn {
+  flex: 1;
+  border-color: #D32F2F;
+  color: #D32F2F;
+  background: transparent;
+}/* =========================================
+   RESOURCES PAGE
+   ========================================= */
+.resources-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 60px 20px;
+}
+
+.resource-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.resource-card {
+  background: white;
+  border: 1px solid #E8DCCB;
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  transition: transform 0.2s;
+}
+
+.resource-card:hover {
+  transform: translateY(-5px);
+  border-color: #A64B2A;
+}
+
+.resource-card h3 {
+  margin-top: 0;
+  color: #333;
+  font-size: 18px;
+}
+
+.resource-meta {
+  color: #A64B2A;
+  font-weight: bold;
+  font-size: 14px;
+  margin: 5px 0;
+}
+
+.resource-description {
+  color: #666;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 10px 0 15px 0;
+}
+
+/* Mobile responsive for resources */
+@media (max-width: 768px) {
+  .resources-container {
+    padding: 40px 20px;
+  }
+  .resource-grid {
+    grid-template-columns: 1fr;
+  }
+}/* =========================================
+   RESOURCES PAGE (UPDATED)
+   ========================================= */
+.resource-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.resource-actions .small-btn {
+  width: 100%;
+  text-align: center;
+  font-size: 13px;
+}
+
+.resource-actions .secondary-btn {
+  border-color: #777;
+  color: #555;
+  padding: 8px 15px;
+}
+
+.resource-actions .secondary-btn:hover {
+  background-color: rgba(0,0,0,0.05);
+  border-color: #555;
+  color: #333;
+}/* WhatsApp Contact Button */
+.whatsapp-btn {
+  background-color: #25D366;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  text-decoration: none;
+  display: inline-block;
+  margin-bottom: 10px;
+  transition: 0.3s;
+}
+
+.whatsapp-btn:hover {
+  background-color: #128C7E;
+}
+/* Language Dropdown */
+.language-select {
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 20px;
+  color: white;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.language-select option {
+  background-color: white;
+  color: #333;
+}
+
+/* Mobile responsive for language dropdown */
+@media (max-width: 768px) {
+  .language-select {
+    padding: 4px 6px;
+    font-size: 12px;
+  }
 }

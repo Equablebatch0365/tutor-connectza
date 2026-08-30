@@ -1,37 +1,62 @@
 // src/pages/FindTutorPage.tsx
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { supabase } from '../lib/supabase';
+import { useLanguage } from '../context/useLanguage';
 
-// Mock Data
-const tutorsData = [
-    { id: 1, name: "Mr. Sipho Dlamini", subject: "Pure Maths", province: "Gauteng", rating: 4.9, price: "R150/hr" },
-    { id: 2, name: "Ms. Sarah van Wyk", subject: "Physical Sciences", province: "Western Cape", rating: 4.8, price: "R180/hr" },
-    { id: 3, name: "Mr. Thabo Mokoena", subject: "Accounting", province: "KwaZulu-Natal", rating: 4.7, price: "R140/hr" },
-    { id: 4, name: "Mrs. Aisha Patel", subject: "Pure Maths", province: "Gauteng", rating: 5.0, price: "R200/hr" },
-    { id: 5, name: "Mr. Johan Botha", subject: "Life Sciences", province: "Free State", rating: 4.6, price: "R120/hr" },
-    { id: 6, name: "Ms. Lerato Maseko", subject: "English HL", province: "Mpumalanga", rating: 4.9, price: "R130/hr" }
-];
+interface Tutor {
+    id: string;
+    full_name: string;
+    subjects: string[];
+    province: string;
+    whatsapp_number: string;
+}
 
 function FindTutorPage() {
+    const { t } = useLanguage(); // <--- Use translations
+
+    const [tutors, setTutors] = useState<Tutor[]>([]);
     const [searchSubject, setSearchSubject] = useState('');
     const [searchProvince, setSearchProvince] = useState('');
+    const [loading, setLoading] = useState(true);
 
     // State for the Booking Modal
-    const [selectedTutor, setSelectedTutor] = useState<typeof tutorsData[0] | null>(null);
+    const [selectedTutor, setSelectedTutor] = useState<Tutor | null>(null);
     const [bookingDate, setBookingDate] = useState('');
     const [bookingTime, setBookingTime] = useState('');
     const [bookingMessage, setBookingMessage] = useState('');
+    const [bookingError, setBookingError] = useState('');
     const [isBooked, setIsBooked] = useState(false);
 
-    const filteredTutors = tutorsData.filter(tutor => {
-        const matchesSubject = searchSubject ? tutor.subject.toLowerCase().includes(searchSubject.toLowerCase()) : true;
+    useEffect(() => {
+        const fetchTutors = async () => {
+            const { data, error } = await supabase
+                .from('profiles')
+                .select('id, full_name, subjects, province, whatsapp_number')
+                .eq('role', 'tutor');
+
+            if (error) {
+                console.error("Error fetching tutors:", error);
+            } else if (data) {
+                setTutors(data);
+            }
+            setLoading(false);
+        };
+
+        fetchTutors();
+    }, []);
+
+    const filteredTutors = tutors.filter(tutor => {
+        const subjectsArray = tutor.subjects || [];
+        const matchesSubject = searchSubject ? subjectsArray.some(s => s.toLowerCase().includes(searchSubject.toLowerCase())) : true;
         const matchesProvince = searchProvince ? tutor.province === searchProvince : true;
         return matchesSubject && matchesProvince;
     });
 
     // Open Modal
-    const openBookingModal = (tutor: typeof tutorsData[0]) => {
+    const openBookingModal = (tutor: Tutor) => {
         setSelectedTutor(tutor);
-        setIsBooked(false); // Reset success message for new booking
+        setIsBooked(false);
+        setBookingError('');
         setBookingDate('');
         setBookingTime('');
         setBookingMessage('');
@@ -42,28 +67,48 @@ function FindTutorPage() {
         setSelectedTutor(null);
     };
 
-    // Submit Booking
-    const handleBookingSubmit = (e: React.FormEvent) => {
+    // Submit Booking to Database
+    const handleBookingSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // This is where we will send the data to a real database later
-        console.log("Booking Request:", {
-            tutor: selectedTutor?.name,
-            date: bookingDate,
-            time: bookingTime,
-            message: bookingMessage
-        });
-        setIsBooked(true); // Show success message
+
+        const { data: { user } } = await supabase.auth.getUser();
+
+        if (!user) {
+            setBookingError("You must be logged in to book a session.");
+            return;
+        }
+
+        const { error } = await supabase
+            .from('sessions')
+            .insert([
+                {
+                    learner_id: user.id,
+                    tutor_id: selectedTutor?.id,
+                    date: bookingDate,
+                    time: bookingTime,
+                    message: bookingMessage,
+                }
+            ]);
+
+        if (error) {
+            setBookingError(error.message);
+            return;
+        }
+
+        setIsBooked(true);
     };
+
+    if (loading) return <div className="find-tutor-container">Loading...</div>;
 
     return (
         <div className="find-tutor-container">
-            <h1 className="page-title">Find Your Tutor</h1>
+            <h1 className="page-title">{t.findTutorTitle}</h1>
 
             {/* Search Filters */}
             <div className="search-bar">
                 <input
                     type="text"
-                    placeholder="Search by subject (e.g. Pure Maths)"
+                    placeholder={t.searchSubject}
                     value={searchSubject}
                     onChange={(e) => setSearchSubject(e.target.value)}
                     className="search-input"
@@ -73,7 +118,7 @@ function FindTutorPage() {
                     onChange={(e) => setSearchProvince(e.target.value)}
                     className="province-select"
                 >
-                    <option value="">All Provinces</option>
+                    <option value="">{t.allProvinces}</option>
                     <option value="Gauteng">Gauteng</option>
                     <option value="Western Cape">Western Cape</option>
                     <option value="KwaZulu-Natal">KwaZulu-Natal</option>
@@ -87,23 +132,32 @@ function FindTutorPage() {
                 {filteredTutors.length > 0 ? (
                     filteredTutors.map((tutor) => (
                         <div className="tutor-card" key={tutor.id}>
-                            <h3>{tutor.name}</h3>
-                            <p className="tutor-subject">📚 {tutor.subject}</p>
+                            <h3>{tutor.full_name}</h3>
+                            <p className="tutor-subject">📚 {tutor.subjects?.join(', ')}</p>
                             <p className="tutor-location">📍 {tutor.province}</p>
-                            <div className="tutor-meta">
-                                <span className="rating">⭐ {tutor.rating}</span>
-                                <span className="price">{tutor.price}</span>
-                            </div>
+
+                            {/* WhatsApp Contact Button */}
+                            {tutor.whatsapp_number && (
+                                <a
+                                    href={`https://wa.me/${tutor.whatsapp_number.replace(/[^0-9]/g, '')}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="whatsapp-btn"
+                                >
+                                    💬 Chat on WhatsApp
+                                </a>
+                            )}
+
                             <button
                                 className="primary-btn small-btn"
                                 onClick={() => openBookingModal(tutor)}
                             >
-                                Request Session
+                                {t.requestSession}
                             </button>
                         </div>
                     ))
                 ) : (
-                    <p className="no-results">No tutors found for your search. Try another subject or province.</p>
+                    <p className="no-results">{t.noTutorsFound}</p>
                 )}
             </div>
 
@@ -113,21 +167,21 @@ function FindTutorPage() {
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                         {isBooked ? (
                             <div className="booking-success">
-                                <h2>🎉 Request Sent!</h2>
-                                <p>Your session request for <strong>{selectedTutor.name}</strong> has been sent successfully.</p>
+                                <h2>🎉 {t.requestSent}</h2>
+                                <p>{t.requestSentDesc}</p>
                                 <p className="booking-summary">
                                     📅 {bookingDate} at ⏰ {bookingTime}
                                 </p>
-                                <button className="primary-btn" onClick={closeBookingModal}>Close</button>
+                                <button className="primary-btn" onClick={closeBookingModal}>{t.close}</button>
                             </div>
                         ) : (
                             <>
-                                <h2>Book with {selectedTutor.name}</h2>
-                                <p className="modal-subtitle">📚 {selectedTutor.subject} | 💰 {selectedTutor.price}</p>
+                                <h2>{selectedTutor.full_name}</h2>
+                                <p className="modal-subtitle">📚 {selectedTutor.subjects?.join(', ')} | 📍 {selectedTutor.province}</p>
 
                                 <form onSubmit={handleBookingSubmit} className="booking-form">
                                     <div className="form-group">
-                                        <label>Preferred Date</label>
+                                        <label>{t.preferredDate}</label>
                                         <input
                                             type="date"
                                             value={bookingDate}
@@ -137,7 +191,7 @@ function FindTutorPage() {
                                     </div>
 
                                     <div className="form-group">
-                                        <label>Preferred Time</label>
+                                        <label>{t.preferredTime}</label>
                                         <input
                                             type="time"
                                             value={bookingTime}
@@ -147,7 +201,7 @@ function FindTutorPage() {
                                     </div>
 
                                     <div className="form-group">
-                                        <label>What do you need help with?</label>
+                                        <label>{t.helpWith}</label>
                                         <textarea
                                             rows={3}
                                             placeholder="e.g. I need help with Calculus and Trigonometry..."
@@ -156,8 +210,10 @@ function FindTutorPage() {
                                         />
                                     </div>
 
-                                    <button type="submit" className="primary-btn auth-btn">Confirm Request</button>
-                                    <button type="button" className="secondary-btn cancel-btn" onClick={closeBookingModal}>Cancel</button>
+                                    {bookingError && <p className="error-text">{bookingError}</p>}
+
+                                    <button type="submit" className="primary-btn auth-btn">{t.confirmRequest}</button>
+                                    <button type="button" className="secondary-btn cancel-btn" onClick={closeBookingModal}>{t.cancel}</button>
                                 </form>
                             </>
                         )}
