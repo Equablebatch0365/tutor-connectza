@@ -186,7 +186,7 @@ function RegisterPage() {
                     </button>
 
                     <p className="legal-text">
-                        By continuing, you agree to Supabase’s Terms of Service and Privacy Policy,
+                        By continuing, you agree to TutorConnect’s Terms of Service and Privacy Policy,
                         and to receive periodic emails with updates.
                     </p>
                 </form>
