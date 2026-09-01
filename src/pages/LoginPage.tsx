@@ -3,14 +3,12 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useLanguage } from '../context/useLanguage';
-import type { Language } from '../context/LanguageContext';
 
 type UserRole = 'learner' | 'tutor';
 
 function LoginPage() {
     const navigate = useNavigate();
-    const { language, setLanguage, t } = useLanguage(); // Added language state here
-
+    const { t } = useLanguage();
     const [role, setRole] = useState<UserRole>('learner');
 
     const [email, setEmail] = useState<string>('');

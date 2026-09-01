@@ -12,6 +12,7 @@ import TutorDashboard from './pages/TutorDashboard';
 import FindTutorPage from './pages/FindTutorPage';
 import ResourcesPage from './pages/ResourcesPage';
 import TutorProfilePage from './pages/TutorProfilePage';
+import ResourcesPage from './pages/ResourcesPage';
 
 // Define a specific type for the user object
 interface UserType {
@@ -166,6 +167,7 @@ function App() {
                 <Route path="/tutor-dashboard" element={<TutorDashboard />} />
                 <Route path="/find-tutor" element={<FindTutorPage />} />
                 <Route path="/tutor/:tutorId" element={<TutorProfilePage />} />
+                <Route path="/resources" element={<ResourcesPage />} />
             </Routes>
         </div>
     );
