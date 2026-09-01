@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react';
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { supabase } from './lib/supabase';
-// IMPORT FROM THE HOOK FILE
 import { useLanguage } from './context/useLanguage';
 
 import HomePage from './pages/HomePage';
@@ -15,11 +14,12 @@ import ResourcesPage from './pages/ResourcesPage';
 
 function App() {
     const navigate = useNavigate();
-    const { language, setLanguage, t } = useLanguage(); // <--- Use language hook
+    const { language, setLanguage, t } = useLanguage();
 
     const [user, setUser] = useState<any>(null);
     const [role, setRole] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
+    const [isMenuOpen, setIsMenuOpen] = useState(false); // <--- STATE FOR MOBILE MENU
 
     useEffect(() => {
         const getUser = async () => {
@@ -61,6 +61,7 @@ function App() {
         navigate('/');
         setUser(null);
         setRole(null);
+        setIsMenuOpen(false); // <--- CLOSE MENU ON LOGOUT
     };
 
     if (loading) return <div>Loading...</div>;
@@ -72,12 +73,20 @@ function App() {
                     <span className="logo-emoji">⛰️</span>
                     Tutor<span>Connect</span>
                 </h1>
-                <div className="nav-links">
+
+                {/* HAMBURGER MENU ICON (Visible on Mobile) */}
+                <div className="hamburger" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                    <div className="bar"></div>
+                    <div className="bar"></div>
+                    <div className="bar"></div>
+                </div>
+
+                {/* DESKTOP NAV LINKS (Hidden on Mobile) */}
+                <div className="nav-links desktop-links">
                     <Link to="/" className="nav-link">{t.home}</Link>
                     <Link to="/find-tutor" className="nav-link">{t.findTutor}</Link>
                     <Link to="/resources" className="nav-link">{t.resources}</Link>
 
-                    {/* Language Dropdown */}
                     <select
                         value={language}
                         onChange={(e) => setLanguage(e.target.value as any)}
@@ -104,6 +113,41 @@ function App() {
                         </>
                     )}
                 </div>
+
+                {/* MOBILE MENU (Only shows when isMenuOpen is true) */}
+                {isMenuOpen && (
+                    <div className="mobile-menu">
+                        <Link to="/" className="nav-link" onClick={() => setIsMenuOpen(false)}>{t.home}</Link>
+                        <Link to="/find-tutor" className="nav-link" onClick={() => setIsMenuOpen(false)}>{t.findTutor}</Link>
+                        <Link to="/resources" className="nav-link" onClick={() => setIsMenuOpen(false)}>{t.resources}</Link>
+
+                        <select
+                            value={language}
+                            onChange={(e) => setLanguage(e.target.value as any)}
+                            className="language-select"
+                        >
+                            <option value="en">English</option>
+                            <option value="af">Afrikaans</option>
+                            <option value="zu">isiZulu</option>
+                        </select>
+
+                        {user && (
+                            <>
+                                <Link to={role === 'tutor' ? '/tutor-dashboard' : '/learner-dashboard'} className="nav-link" onClick={() => setIsMenuOpen(false)}>
+                                    {t.dashboard}
+                                </Link>
+                                <button onClick={handleLogout} className="secondary-btn nav-signup">{t.logout}</button>
+                            </>
+                        )}
+
+                        {!user && (
+                            <>
+                                <Link to="/register" className="secondary-btn nav-signup" onClick={() => setIsMenuOpen(false)}>{t.signUp}</Link>
+                                <Link to="/login" className="login-btn" onClick={() => setIsMenuOpen(false)}>{t.logIn}</Link>
+                            </>
+                        )}
+                    </div>
+                )}
             </nav>
 
             <Routes>

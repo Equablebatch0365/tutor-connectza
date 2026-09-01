@@ -1,0 +1,41 @@
+publishable key: sb_publishable_9lPZq7QKfKHJKGEk70rmfw_e0YsqRTS
+project URL: https://blihtnjyiubxbsunsncn.supabase.co/rest/v1/
+-------------------------------------------------------------------------------------------
+Phase 3: Going Live
+Fix the Email Confirmation: Update your login logic to handle the real "Confirm email" flow (for when you launch publicly).
+
+Deploy to Vercel (Again!): Push your new code to GitHub. Crucially, remember to add your .env keys to Vercel's project settings so the live site works too.
+----------------------------------------------------------------------------------------------
+Option 2: "Get it back online" (Deployment)
+Let's push this amazing new code to GitHub and redeploy it to Vercel! Crucially, we will need to add your .env keys to Vercel so the live site uses the same database. This will give you a working link you can share with your friends to test.
+
+Option 3: "Make it feel like a business"
+Add a small "How it works" section to the homepage, or create your Terms of Service & Privacy Policy pages (since we put those links on the Login page).
+
+
+https://www.education.gov.za/2024NSCNovemberpastpapers.aspx
+
+---------------------------------------------------------------------------------------------
+Option A: The "Trust" & "Growth" Path (Recommended)
+Create a "Tutor Profile" page and a "Rating/Review" system. This makes your platform feel safe and professional.
+
+Effort: Medium
+
+Impact: High (Builds long-term trust)
+
+Option B: The "Monetization" Path
+Since you have sessions, it makes sense to add Payments (like PayFast, Yoco, or Ozow for South Africa).
+
+Effort: High (Requires backend, payment gateway integration)
+
+Impact: High (Makes it a business)
+
+Option C: The "Deployment" Path (Quick Win)
+Let's push the current code (with the new Resources page) to GitHub and Vercel. We'll add your .env keys to Vercel so the live site works perfectly. This gives you a real, working link to share with friends.
+
+Effort: Low
+
+Impact: High (Instant gratification, real feedback)
+
+
+

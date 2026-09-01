@@ -39,6 +39,7 @@ body {
   color: #F2A65A;
 }
 
+/* Desktop Links (hidden on mobile) */
 .nav-links {
   display: flex;
   align-items: center;
@@ -91,6 +92,28 @@ body {
 .secondary-btn.nav-signup:hover {
   background-color: #FDFBF7;
   color: #A64B2A;
+}
+
+/* HAMBURGER MENU (Hidden by default on desktop) */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  gap: 5px;
+  margin-left: auto;
+}
+
+.hamburger .bar {
+  width: 25px;
+  height: 3px;
+  background-color: white;
+  border-radius: 2px;
+  transition: 0.3s;
+}
+
+/* Mobile Menu (Hidden by default) */
+.mobile-menu {
+  display: none;
 }
 
 /* =========================================
@@ -772,14 +795,38 @@ body {
   .logo-emoji {
     font-size: 22px;
   }
-  .nav-links {
-    gap: 10px;
+
+  /* HIDE Desktop links, SHOW Hamburger */
+  .nav-links.desktop-links {
+    display: none;
   }
-  .nav-links a.nav-link,
-  .secondary-btn.nav-signup,
-  .login-btn {
-    font-size: 12px;
-    padding: 6px 10px;
+  .hamburger {
+    display: flex;
+  }
+
+  /* Mobile Dropdown Menu */
+  .mobile-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    position: absolute;
+    top: 70px;
+    right: 20px;
+    background-color: #A64B2A;
+    padding: 20px;
+    border-radius: 10px;
+    width: 200px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    z-index: 100;
+  }
+
+  .mobile-menu .language-select {
+    width: 100%;
+  }
+
+  .mobile-menu .secondary-btn.nav-signup,
+  .mobile-menu .login-btn {
+    text-align: center;
   }
 
   /* Hero */
@@ -891,74 +938,7 @@ body {
   }
 }
 
-/* Hides specific navbar link on small phones */
-@media (max-width: 600px) {
-  .nav-links a.nav-link:nth-child(2) {
-    display: none;
-  }
-}
-/* Legal Text on Login/Register */
-.legal-text {
-  font-size: 11px;
-  color: #888;
-  text-align: center;
-  margin-top: 15px;
-  line-height: 1.5;
-}
-/* Session Request Cards */
-.session-card {
-  background: #FDF0E7;
-  border: 1px solid #E8DCCB;
-  border-radius: 10px;
-  padding: 15px;
-  margin-bottom: 15px;
-}
-
-.session-card p {
-  margin: 5px 0;
-  font-size: 14px;
-  color: #555;
-}
-/* Status Colors */
-.status-pending { color: #F2A65A; }
-.status-accepted { color: #4CAF50; }
-.status-declined { color: #D32F2F; }
-
-/* Meeting Details */
-.meeting-details {
-  margin-top: 10px;
-  border-top: 1px solid #ddd;
-  padding-top: 10px;
-}
-
-.meeting-details a {
-  color: #A64B2A;
-  font-weight: bold;
-  text-decoration: underline;
-}
-
-/* Response Buttons */
-.respond-btn {
-  width: 100%;
-  margin-top: 10px;
-}
-
-.modal-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.modal-actions .primary-btn {
-  flex: 1;
-}
-
-.modal-actions .cancel-btn {
-  flex: 1;
-  border-color: #D32F2F;
-  color: #D32F2F;
-  background: transparent;
-}/* =========================================
+/* =========================================
    RESOURCES PAGE
    ========================================= */
 .resources-container {
@@ -1007,17 +987,6 @@ body {
   margin: 10px 0 15px 0;
 }
 
-/* Mobile responsive for resources */
-@media (max-width: 768px) {
-  .resources-container {
-    padding: 40px 20px;
-  }
-  .resource-grid {
-    grid-template-columns: 1fr;
-  }
-}/* =========================================
-   RESOURCES PAGE (UPDATED)
-   ========================================= */
 .resource-actions {
   display: flex;
   flex-direction: column;
@@ -1041,7 +1010,21 @@ body {
   background-color: rgba(0,0,0,0.05);
   border-color: #555;
   color: #333;
-}/* WhatsApp Contact Button */
+}
+
+/* Mobile responsive for resources */
+@media (max-width: 768px) {
+  .resources-container {
+    padding: 40px 20px;
+  }
+  .resource-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================
+   WHATSAPP BUTTON
+   ========================================= */
 .whatsapp-btn {
   background-color: #25D366;
   color: white;
@@ -1059,7 +1042,10 @@ body {
 .whatsapp-btn:hover {
   background-color: #128C7E;
 }
-/* Language Dropdown */
+
+/* =========================================
+   LANGUAGE DROPDOWN
+   ========================================= */
 .language-select {
   background-color: transparent;
   border: 1px solid rgba(255, 255, 255, 0.5);
@@ -1076,10 +1062,74 @@ body {
   color: #333;
 }
 
-/* Mobile responsive for language dropdown */
 @media (max-width: 768px) {
   .language-select {
     padding: 4px 6px;
     font-size: 12px;
   }
+}
+
+/* Legal Text on Login/Register */
+.legal-text {
+  font-size: 11px;
+  color: #888;
+  text-align: center;
+  margin-top: 15px;
+  line-height: 1.5;
+}
+
+/* Session Request Cards */
+.session-card {
+  background: #FDF0E7;
+  border: 1px solid #E8DCCB;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.session-card p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #555;
+}
+
+/* Status Colors */
+.status-pending { color: #F2A65A; }
+.status-accepted { color: #4CAF50; }
+.status-declined { color: #D32F2F; }
+
+/* Meeting Details */
+.meeting-details {
+  margin-top: 10px;
+  border-top: 1px solid #ddd;
+  padding-top: 10px;
+}
+
+.meeting-details a {
+  color: #A64B2A;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+/* Response Buttons */
+.respond-btn {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.modal-actions .primary-btn {
+  flex: 1;
+}
+
+.modal-actions .cancel-btn {
+  flex: 1;
+  border-color: #D32F2F;
+  color: #D32F2F;
+  background: transparent;
 }
