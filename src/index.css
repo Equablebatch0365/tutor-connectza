@@ -1133,3 +1133,205 @@ body {
   color: #D32F2F;
   background: transparent;
 }
+/* Review Button on Learner Dashboard */
+.review-btn {
+  margin-top: 10px;
+  width: 100%;
+  font-size: 13px;
+  padding: 10px;
+}
+
+.review-stars span {
+  font-size: 30px;
+  cursor: pointer;
+  color: #ddd;
+  margin: 0 5px;
+}
+
+.review-stars span.active {
+  color: #F2A65A;
+}
+/* Star Rating Display (Tutor Cards) */
+.rating-display {
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stars-display {
+  display: inline-block;
+}
+
+.star-filled {
+  color: #F2A65A;
+  font-size: 20px;
+}
+
+.star-empty {
+  color: #ddd;
+  font-size: 20px;
+}
+
+.rating-text {
+  font-size: 14px;
+  color: #666;
+}
+
+/* Star Rating Input (Review Modal) */
+.review-stars {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 15px;
+}
+
+.review-stars span {
+  font-size: 35px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.review-stars span.star-filled {
+  color: #F2A65A;
+}
+
+.review-stars span.star-empty {
+  color: #ddd;
+}
+
+.review-stars span:hover {
+  transform: scale(1.2);
+}
+/* Tutor Profile Page */
+.tutor-profile-header {
+  margin-bottom: 40px;
+}
+
+.tutor-profile-header h1 {
+  color: #A64B2A;
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.tutor-profile-header p {
+  color: #555;
+  font-size: 16px;
+  margin: 5px 0;
+}
+
+.tutor-name-link {
+  text-decoration: none;
+}
+
+.tutor-name-link h3 {
+  color: #A64B2A;
+  transition: 0.3s;
+}
+
+.tutor-name-link h3:hover {
+  color: #F2A65A;
+}
+
+/* Reviews Section */
+.reviews-section {
+  margin-bottom: 40px;
+}
+
+.review-card {
+  background: white;
+  border: 1px solid #E8DCCB;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.review-header .review-stars {
+  font-size: 16px;
+}
+
+.review-card p {
+  margin: 5px 0;
+  color: #555;
+}
+
+.review-card small {
+  color: #888;
+  font-size: 12px;
+}
+/* Success Message */
+.success-text {
+  color: #4CAF50;
+  font-weight: bold;
+  margin-top: 10px;
+  font-size: 14px;
+}
+/* How It Works Section */
+.how-it-works {
+  padding: 60px 80px;
+  text-align: center;
+  background-color: #FFFFFF;
+}
+
+.how-it-works-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 30px;
+  max-width: 900px;
+  margin: 40px auto 0;
+}
+
+.how-card {
+  background: #FDF0E7;
+  border: 1px solid #E8DCCB;
+  border-radius: 15px;
+  padding: 30px;
+  transition: transform 0.3s;
+}
+
+.how-card:hover {
+  transform: translateY(-5px);
+  border-color: #A64B2A;
+}
+
+.how-number {
+  background-color: #A64B2A;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 20px;
+  margin: 0 auto 20px;
+}
+
+.how-card h3 {
+  color: #A64B2A;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.how-card p {
+  color: #666;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Mobile responsive for How It Works */
+@media (max-width: 768px) {
+  .how-it-works {
+    padding: 40px 20px;
+  }
+  .how-it-works-grid {
+    grid-template-columns: 1fr;
+  }
+}

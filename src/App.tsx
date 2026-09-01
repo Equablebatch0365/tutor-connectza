@@ -11,22 +11,30 @@ import LearnerDashboard from './pages/LearnerDashboard';
 import TutorDashboard from './pages/TutorDashboard';
 import FindTutorPage from './pages/FindTutorPage';
 import ResourcesPage from './pages/ResourcesPage';
+import TutorProfilePage from './pages/TutorProfilePage';
+
+// Define a specific type for the user object
+interface UserType {
+    id: string;
+    email?: string;
+}
 
 function App() {
     const navigate = useNavigate();
     const { language, setLanguage, t } = useLanguage();
 
-    const [user, setUser] = useState<any>(null);
+    // Replace any with UserType
+    const [user, setUser] = useState<UserType | null>(null);
     const [role, setRole] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
-    const [isMenuOpen, setIsMenuOpen] = useState(false); // <--- STATE FOR MOBILE MENU
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     useEffect(() => {
         const getUser = async () => {
             const { data: { user } } = await supabase.auth.getUser();
 
             if (user) {
-                setUser(user);
+                setUser({ id: user.id, email: user.email }); // Set the typed user
                 const { data: profileData } = await supabase
                     .from('profiles')
                     .select('role')
@@ -42,7 +50,7 @@ function App() {
 
         const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
             if (event === 'SIGNED_IN' && session) {
-                setUser(session.user);
+                setUser({ id: session.user.id, email: session.user.email });
                 supabase.from('profiles').select('role').eq('id', session.user.id).single().then(({ data }) => {
                     if (data) setRole(data.role);
                 });
@@ -61,7 +69,7 @@ function App() {
         navigate('/');
         setUser(null);
         setRole(null);
-        setIsMenuOpen(false); // <--- CLOSE MENU ON LOGOUT
+        setIsMenuOpen(false);
     };
 
     if (loading) return <div>Loading...</div>;
@@ -74,14 +82,14 @@ function App() {
                     Tutor<span>Connect</span>
                 </h1>
 
-                {/* HAMBURGER MENU ICON (Visible on Mobile) */}
+                {/* HAMBURGER MENU ICON */}
                 <div className="hamburger" onClick={() => setIsMenuOpen(!isMenuOpen)}>
                     <div className="bar"></div>
                     <div className="bar"></div>
                     <div className="bar"></div>
                 </div>
 
-                {/* DESKTOP NAV LINKS (Hidden on Mobile) */}
+                {/* DESKTOP LINKS */}
                 <div className="nav-links desktop-links">
                     <Link to="/" className="nav-link">{t.home}</Link>
                     <Link to="/find-tutor" className="nav-link">{t.findTutor}</Link>
@@ -114,7 +122,7 @@ function App() {
                     )}
                 </div>
 
-                {/* MOBILE MENU (Only shows when isMenuOpen is true) */}
+                {/* MOBILE MENU */}
                 {isMenuOpen && (
                     <div className="mobile-menu">
                         <Link to="/" className="nav-link" onClick={() => setIsMenuOpen(false)}>{t.home}</Link>
@@ -157,7 +165,7 @@ function App() {
                 <Route path="/learner-dashboard" element={<LearnerDashboard />} />
                 <Route path="/tutor-dashboard" element={<TutorDashboard />} />
                 <Route path="/find-tutor" element={<FindTutorPage />} />
-                <Route path="/resources" element={<ResourcesPage />} />
+                <Route path="/tutor/:tutorId" element={<TutorProfilePage />} />
             </Routes>
         </div>
     );

@@ -1,5 +1,6 @@
 // src/pages/FindTutorPage.tsx
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom'; // Import Link
 import { supabase } from '../lib/supabase';
 import { useLanguage } from '../context/useLanguage';
 
@@ -11,10 +12,17 @@ interface Tutor {
     whatsapp_number: string;
 }
 
+interface Rating {
+    tutor_id: string;
+    avg_rating: number;
+    review_count: number;
+}
+
 function FindTutorPage() {
-    const { t } = useLanguage(); // <--- Use translations
+    const { t } = useLanguage();
 
     const [tutors, setTutors] = useState<Tutor[]>([]);
+    const [ratings, setRatings] = useState<Rating[]>([]);
     const [searchSubject, setSearchSubject] = useState('');
     const [searchProvince, setSearchProvince] = useState('');
     const [loading, setLoading] = useState(true);
@@ -39,11 +47,38 @@ function FindTutorPage() {
             } else if (data) {
                 setTutors(data);
             }
+
+            // Fetch ratings
+            const { data: ratingData } = await supabase
+                .from('reviews')
+                .select('tutor_id, rating');
+
+            if (ratingData) {
+                const ratingMap: { [key: string]: number[] } = {};
+                ratingData.forEach((r) => {
+                    if (!ratingMap[r.tutor_id]) ratingMap[r.tutor_id] = [];
+                    ratingMap[r.tutor_id].push(r.rating);
+                });
+
+                const calculatedRatings: Rating[] = Object.keys(ratingMap).map((tutorId) => ({
+                    tutor_id: tutorId,
+                    avg_rating: ratingMap[tutorId].reduce((a, b) => a + b, 0) / ratingMap[tutorId].length,
+                    review_count: ratingMap[tutorId].length,
+                }));
+
+                setRatings(calculatedRatings);
+            }
+
             setLoading(false);
         };
 
         fetchTutors();
     }, []);
+
+    const getAverageRating = (tutorId: string) => {
+        const rating = ratings.find((r) => r.tutor_id === tutorId);
+        return rating || null;
+    };
 
     const filteredTutors = tutors.filter(tutor => {
         const subjectsArray = tutor.subjects || [];
@@ -52,7 +87,6 @@ function FindTutorPage() {
         return matchesSubject && matchesProvince;
     });
 
-    // Open Modal
     const openBookingModal = (tutor: Tutor) => {
         setSelectedTutor(tutor);
         setIsBooked(false);
@@ -62,12 +96,10 @@ function FindTutorPage() {
         setBookingMessage('');
     };
 
-    // Close Modal
     const closeBookingModal = () => {
         setSelectedTutor(null);
     };
 
-    // Submit Booking to Database
     const handleBookingSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -104,7 +136,6 @@ function FindTutorPage() {
         <div className="find-tutor-container">
             <h1 className="page-title">{t.findTutorTitle}</h1>
 
-            {/* Search Filters */}
             <div className="search-bar">
                 <input
                     type="text"
@@ -127,35 +158,55 @@ function FindTutorPage() {
                 </select>
             </div>
 
-            {/* Tutor List */}
             <div className="tutor-grid">
                 {filteredTutors.length > 0 ? (
-                    filteredTutors.map((tutor) => (
-                        <div className="tutor-card" key={tutor.id}>
-                            <h3>{tutor.full_name}</h3>
-                            <p className="tutor-subject">📚 {tutor.subjects?.join(', ')}</p>
-                            <p className="tutor-location">📍 {tutor.province}</p>
+                    filteredTutors.map((tutor) => {
+                        const ratingInfo = getAverageRating(tutor.id);
+                        const avg = ratingInfo ? ratingInfo.avg_rating : 0;
 
-                            {/* WhatsApp Contact Button */}
-                            {tutor.whatsapp_number && (
-                                <a
-                                    href={`https://wa.me/${tutor.whatsapp_number.replace(/[^0-9]/g, '')}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="whatsapp-btn"
+                        return (
+                            <div className="tutor-card" key={tutor.id}>
+                                {/* Profile Link */}
+                                <Link to={`/tutor/${tutor.id}`} className="tutor-name-link">
+                                    <h3>{tutor.full_name}</h3>
+                                </Link>
+                                <p className="tutor-subject">📚 {tutor.subjects?.join(', ')}</p>
+                                <p className="tutor-location">📍 {tutor.province}</p>
+
+                                {/* Rating */}
+                                <div className="rating-display">
+                                    <div className="stars-display">
+                                        {[1, 2, 3, 4, 5].map((star) => (
+                                            <span key={star} className={star <= Math.round(avg) ? 'star-filled' : 'star-empty'}>
+                        ★
+                      </span>
+                                        ))}
+                                    </div>
+                                    <span className="rating-text">
+                    {ratingInfo ? `${avg.toFixed(1)} (${ratingInfo.review_count} reviews)` : "No ratings yet"}
+                  </span>
+                                </div>
+
+                                {tutor.whatsapp_number && (
+                                    <a
+                                        href={`https://wa.me/${tutor.whatsapp_number.replace(/[^0-9]/g, '')}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="whatsapp-btn"
+                                    >
+                                        💬 Chat on WhatsApp
+                                    </a>
+                                )}
+
+                                <button
+                                    className="primary-btn small-btn"
+                                    onClick={() => openBookingModal(tutor)}
                                 >
-                                    💬 Chat on WhatsApp
-                                </a>
-                            )}
-
-                            <button
-                                className="primary-btn small-btn"
-                                onClick={() => openBookingModal(tutor)}
-                            >
-                                {t.requestSession}
-                            </button>
-                        </div>
-                    ))
+                                    {t.requestSession}
+                                </button>
+                            </div>
+                        );
+                    })
                 ) : (
                     <p className="no-results">{t.noTutorsFound}</p>
                 )}

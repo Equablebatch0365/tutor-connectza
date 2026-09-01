@@ -38,6 +38,28 @@ function HomePage() {
                 </div>
             </main>
 
+            {/* HOW IT WORKS SECTION (NEW) */}
+            <section className="how-it-works">
+                <h2 className="section-title">How It Works</h2>
+                <div className="how-it-works-grid">
+                    <div className="how-card">
+                        <div className="how-number">1</div>
+                        <h3>Sign Up</h3>
+                        <p>Create your free account as a Learner or a Tutor in under 2 minutes.</p>
+                    </div>
+                    <div className="how-card">
+                        <div className="how-number">2</div>
+                        <h3>Find a Match</h3>
+                        <p>Browse verified tutors by subject and province, check their reviews, and chat on WhatsApp.</p>
+                    </div>
+                    <div className="how-card">
+                        <div className="how-number">3</div>
+                        <h3>Book & Learn</h3>
+                        <p>Request a session, get accepted, and meet online via Zoom, Teams, or Jitsi.</p>
+                    </div>
+                </div>
+            </section>
+
             {/* WAITLIST SECTION */}
             <section id="waitlist" className="waitlist-section">
                 <div className="waitlist-card">

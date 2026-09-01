@@ -3,12 +3,13 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useLanguage } from '../context/useLanguage';
+import type { Language } from '../context/LanguageContext';
 
 type UserRole = 'learner' | 'tutor';
 
 function LoginPage() {
     const navigate = useNavigate();
-    const { t } = useLanguage(); // <--- Use translations
+    const { language, setLanguage, t } = useLanguage(); // Added language state here
 
     const [role, setRole] = useState<UserRole>('learner');
 
@@ -56,7 +57,7 @@ function LoginPage() {
                 <h2>{t.logIn}</h2>
                 <p>{t.selectRole}</p>
 
-                {/* Mock Role Selector */}
+                {/* Role Selector */}
                 <div className="role-selector">
                     <button
                         type="button"

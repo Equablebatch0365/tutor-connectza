@@ -2,12 +2,14 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
+import { useLanguage } from '../context/useLanguage';
 
 interface TutorProfile {
     full_name: string;
     subjects: string[];
     experience: string;
-    whatsapp_link: string;
+    whatsapp_number: string;
+    bio: string;
 }
 
 interface SessionRequest {
@@ -24,18 +26,23 @@ interface SessionRequest {
 }
 
 function TutorDashboard() {
+    const { t } = useLanguage();
+
     const [profile, setProfile] = useState<TutorProfile | null>(null);
     const [sessionRequests, setSessionRequests] = useState<SessionRequest[]>([]);
     const [loading, setLoading] = useState(true);
 
-    // State for the "Add WhatsApp" form
-    const [whatsappLink, setWhatsappLink] = useState('');
-    const [whatsappError, setWhatsappError] = useState('');
+    // State for "Edit Profile"
+    const [whatsappNumber, setWhatsappNumber] = useState('');
+    const [experience, setExperience] = useState('');
+    const [bio, setBio] = useState('');
+    const [editError, setEditError] = useState('');
+    const [editSuccess, setEditSuccess] = useState(false);
 
-    // State for the "Response Modal"
+    // State for "Respond to Session"
     const [respondingTo, setRespondingTo] = useState<SessionRequest | null>(null);
     const [meetingLink, setMeetingLink] = useState('');
-    const [whatsappNumber, setWhatsappNumber] = useState('');
+    const [whatsappSessionNumber, setWhatsappSessionNumber] = useState('');
     const [responseError, setResponseError] = useState('');
 
     useEffect(() => {
@@ -45,13 +52,15 @@ function TutorDashboard() {
             if (user) {
                 const { data: profileData } = await supabase
                     .from('profiles')
-                    .select('full_name, subjects, experience, whatsapp_link')
+                    .select('*')
                     .eq('id', user.id)
                     .single();
 
                 if (profileData) {
                     setProfile(profileData);
-                    setWhatsappLink(profileData.whatsapp_link || '');
+                    setWhatsappNumber(profileData.whatsapp_number || '');
+                    setExperience(profileData.experience || '');
+                    setBio(profileData.bio || '');
                 }
 
                 const { data: sessionsData } = await supabase
@@ -67,43 +76,40 @@ function TutorDashboard() {
         fetchData();
     }, []);
 
-    // Add or update WhatsApp link
-    const handleWhatsappSubmit = async () => {
-        if (!whatsappLink.trim()) {
-            setWhatsappError("Please enter a valid WhatsApp link or number.");
-            return;
-        }
-
+    // Update Profile
+    const handleProfileUpdate = async () => {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) return;
 
         const { error } = await supabase
             .from('profiles')
-            .update({ whatsapp_link: whatsappLink })
+            .update({
+                whatsapp_number: whatsappNumber,
+                experience: experience,
+                bio: bio
+            })
             .eq('id', user.id);
 
         if (error) {
-            setWhatsappError(error.message);
+            setEditError(error.message);
             return;
         }
 
-        setProfile((prev) => prev ? { ...prev, whatsapp_link: whatsappLink } : prev);
-        setWhatsappError('');
+        setEditSuccess(true);
+        setTimeout(() => setEditSuccess(false), 3000);
     };
 
-    // Open the response modal
     const openResponseModal = (session: SessionRequest) => {
         setRespondingTo(session);
         setMeetingLink(session.meeting_link || '');
-        setWhatsappNumber(session.whatsapp_number || '');
+        setWhatsappSessionNumber(session.whatsapp_number || '');
         setResponseError('');
     };
 
-    // Accept the request
     const handleAccept = async () => {
         if (!respondingTo) return;
 
-        if (!meetingLink && !whatsappNumber) {
+        if (!meetingLink && !whatsappSessionNumber) {
             setResponseError("Please add at least a WhatsApp number or a Meeting link (Zoom/Teams/Jitsi).");
             return;
         }
@@ -113,7 +119,7 @@ function TutorDashboard() {
             .update({
                 status: 'accepted',
                 meeting_link: meetingLink,
-                whatsapp_number: whatsappNumber
+                whatsapp_number: whatsappSessionNumber
             })
             .eq('id', respondingTo.id);
 
@@ -126,7 +132,6 @@ function TutorDashboard() {
         setRespondingTo(null);
     };
 
-    // Decline the request
     const handleDecline = async () => {
         if (!respondingTo) return;
 
@@ -151,7 +156,7 @@ function TutorDashboard() {
         <div className="dashboard-container">
             <div className="dash-header">
                 <h1>Welcome, {profile.full_name} 💼</h1>
-                <p>{profile.subjects?.join(', ') || 'No subjects listed'} | {profile.experience || 'No experience'} Years Experience</p>
+                <p>{profile.subjects?.join(', ') || 'No subjects listed'}</p>
             </div>
 
             <div className="dash-grid">
@@ -180,31 +185,51 @@ function TutorDashboard() {
                             </div>
                         ))
                     ) : (
-                        <p>No session requests yet. Your profile will be visible to learners soon!</p>
+                        <p>No session requests yet.</p>
                     )}
                 </div>
 
+                {/* EDIT PROFILE SECTION */}
                 <div className="dash-card">
-                    <h3>📱 Connect with Learners</h3>
-                    <p>Add your WhatsApp number (with country code) or link so learners can reach you before booking.</p>
+                    <h3>📝 Edit My Profile</h3>
+                    <p>Add your details so learners can see them and contact you.</p>
 
                     <div className="form-group">
-                        <label>WhatsApp Link or Number</label>
+                        <label>WhatsApp Number (e.g., 27821234567)</label>
                         <input
                             type="text"
-                            placeholder="e.g. https://wa.me/27821234567"
-                            value={whatsappLink}
-                            onChange={(e) => setWhatsappLink(e.target.value)}
+                            placeholder="e.g. 27821234567"
+                            value={whatsappNumber}
+                            onChange={(e) => setWhatsappNumber(e.target.value)}
                         />
                     </div>
-                    {whatsappError && <p className="error-text">{whatsappError}</p>}
-                    <button className="primary-btn small-btn" onClick={handleWhatsappSubmit}>Save WhatsApp Link</button>
-                </div>
 
-                <div className="dash-card earnings-card">
-                    <h3>💰 Earnings (This Month)</h3>
-                    <p className="earnings-number">R0.00</p>
-                    <p className="earnings-sub">Payouts will be available once payment integration is live.</p>
+                    <div className="form-group">
+                        <label>Years of Experience</label>
+                        <input
+                            type="number"
+                            placeholder="e.g. 3"
+                            value={experience}
+                            onChange={(e) => setExperience(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Short Bio</label>
+                        <textarea
+                            rows={3}
+                            placeholder="e.g. I am a passionate Maths tutor with 5 years of experience..."
+                            value={bio}
+                            onChange={(e) => setBio(e.target.value)}
+                        />
+                    </div>
+
+                    {editError && <p className="error-text">{editError}</p>}
+                    {editSuccess && <p className="success-text">✅ Profile updated!</p>}
+
+                    <button className="primary-btn small-btn" onClick={handleProfileUpdate}>
+                        Save Profile
+                    </button>
                 </div>
             </div>
 
@@ -220,8 +245,8 @@ function TutorDashboard() {
                             <input
                                 type="text"
                                 placeholder="e.g. +27821234567"
-                                value={whatsappNumber}
-                                onChange={(e) => setWhatsappNumber(e.target.value)}
+                                value={whatsappSessionNumber}
+                                onChange={(e) => setWhatsappSessionNumber(e.target.value)}
                             />
                         </div>
 
