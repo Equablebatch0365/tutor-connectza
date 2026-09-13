@@ -95,15 +95,22 @@ function App() {
                     <Link to="/" className="nav-link">{t.home}</Link>
                     <Link to="/find-tutor" className="nav-link">{t.findTutor}</Link>
                     <Link to="/resources" className="nav-link">{t.resources}</Link>
-
                     <select
                         value={language}
-                        onChange={(e) => setLanguage(e.target.value as Language)} // <-- changed from "as any"
+                        onChange={(e) => setLanguage(e.target.value as Language)}
                         className="language-select"
                     >
                         <option value="en">English</option>
                         <option value="af">Afrikaans</option>
                         <option value="zu">isiZulu</option>
+                        <option value="xh">isiXhosa</option>
+                        <option value="st">Sesotho</option>
+                        <option value="tn">Setswana</option>
+                        <option value="nso">Sepedi</option>
+                        <option value="ts">Xitsonga</option>
+                        <option value="ve">Tshivenda</option>
+                        <option value="ss">siSwati</option>
+                        <option value="nr">isiNdebele</option>
                     </select>
 
                     {user && (
@@ -129,15 +136,22 @@ function App() {
                         <Link to="/" className="nav-link" onClick={() => setIsMenuOpen(false)}>{t.home}</Link>
                         <Link to="/find-tutor" className="nav-link" onClick={() => setIsMenuOpen(false)}>{t.findTutor}</Link>
                         <Link to="/resources" className="nav-link" onClick={() => setIsMenuOpen(false)}>{t.resources}</Link>
-
                         <select
                             value={language}
-                            onChange={(e) => setLanguage(e.target.value as Language)} // <-- changed from "as any"
+                            onChange={(e) => setLanguage(e.target.value as Language)}
                             className="language-select"
                         >
                             <option value="en">English</option>
                             <option value="af">Afrikaans</option>
                             <option value="zu">isiZulu</option>
+                            <option value="xh">isiXhosa</option>
+                            <option value="st">Sesotho</option>
+                            <option value="tn">Setswana</option>
+                            <option value="nso">Sepedi</option>
+                            <option value="ts">Xitsonga</option>
+                            <option value="ve">Tshivenda</option>
+                            <option value="ss">siSwati</option>
+                            <option value="nr">isiNdebele</option>
                         </select>
 
                         {user && (
