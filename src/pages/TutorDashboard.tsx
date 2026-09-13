@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { useLanguage } from '../context/useLanguage';
 
 interface TutorProfile {
     full_name: string;
@@ -26,7 +25,6 @@ interface SessionRequest {
 }
 
 function TutorDashboard() {
-    const { t } = useLanguage();
     const [profile, setProfile] = useState<TutorProfile | null>(null);
     const [sessionRequests, setSessionRequests] = useState<SessionRequest[]>([]);
     const [loading, setLoading] = useState(true);
@@ -72,8 +70,7 @@ function TutorDashboard() {
             setLoading(false);
         };
 
-        fetchData();
-    }, []);
+        void fetchData();    }, []);
 
     // Update Profile
     const handleProfileUpdate = async () => {

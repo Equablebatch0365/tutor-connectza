@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { supabase } from './lib/supabase';
 import { useLanguage } from './context/useLanguage';
+import type { Language } from './context/LanguageContext';
 
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
@@ -10,9 +11,8 @@ import RegisterPage from './pages/RegisterPage';
 import LearnerDashboard from './pages/LearnerDashboard';
 import TutorDashboard from './pages/TutorDashboard';
 import FindTutorPage from './pages/FindTutorPage';
-import ResourcesPage from './pages/ResourcesPage';
 import TutorProfilePage from './pages/TutorProfilePage';
-import ResourcesPage from './pages/ResourcesPage';
+import ResourcesPage from './pages/ResourcesPage'; // <-- Only ONE import now
 
 // Define a specific type for the user object
 interface UserType {
@@ -98,7 +98,7 @@ function App() {
 
                     <select
                         value={language}
-                        onChange={(e) => setLanguage(e.target.value as any)}
+                        onChange={(e) => setLanguage(e.target.value as Language)} // <-- changed from "as any"
                         className="language-select"
                     >
                         <option value="en">English</option>
@@ -132,7 +132,7 @@ function App() {
 
                         <select
                             value={language}
-                            onChange={(e) => setLanguage(e.target.value as any)}
+                            onChange={(e) => setLanguage(e.target.value as Language)} // <-- changed from "as any"
                             className="language-select"
                         >
                             <option value="en">English</option>
