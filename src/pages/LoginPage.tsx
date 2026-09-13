@@ -99,6 +99,14 @@ function LoginPage() {
                     <button type="submit" className="primary-btn auth-btn">
                         {t.loginBtn}
                     </button>
+
+                    <p className="legal-text">
+                        By continuing, you agree to TutorConnect's{' '}
+                        <Link to="/terms" className="legal-link">Terms of Service</Link>
+                        {' '}and{' '}
+                        <Link to="/privacy" className="legal-link">Privacy Policy</Link>,
+                        and to receive periodic emails with updates.
+                    </p>
                 </form>
 
                 <div className="auth-switch">

@@ -1335,3 +1335,153 @@ body {
     grid-template-columns: 1fr;
   }
 }
+/* Trust & Safety Actions */
+.trust-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #E8DCCB;
+}
+
+.report-btn {
+  border-color: #F2A65A;
+  color: #F2A65A;
+  padding: 10px 20px;
+  font-size: 14px;
+}
+
+.report-btn:hover {
+  background-color: rgba(242, 166, 90, 0.1);
+}
+
+.block-btn {
+  border-color: #D32F2F;
+  color: #D32F2F;
+  padding: 10px 20px;
+  font-size: 14px;
+}
+
+.block-btn:hover {
+  background-color: rgba(211, 47, 47, 0.1);
+}
+
+.block-confirm {
+  background-color: #D32F2F !important;
+  color: white !important;
+}
+
+.block-confirm:hover {
+  background-color: #B71C1C !important;
+}
+/* Legal Pages (Terms & Privacy) */
+.legal-page {
+  padding: 60px 20px;
+  background-color: #FDFBF7;
+}
+
+.legal-content {
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+  border: 1px solid #E8DCCB;
+}
+
+.legal-content h1 {
+  color: #A64B2A;
+  font-size: 36px;
+  margin-bottom: 5px;
+}
+
+.legal-updated {
+  color: #888;
+  font-size: 14px;
+  margin-bottom: 30px;
+}
+
+.legal-content h2 {
+  color: #A64B2A;
+  font-size: 20px;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+.legal-content p,
+.legal-content li {
+  color: #444;
+  line-height: 1.7;
+  font-size: 15px;
+}
+
+.legal-content ul {
+  padding-left: 20px;
+  margin: 10px 0;
+}
+
+.legal-content li {
+  margin-bottom: 5px;
+}
+
+.legal-content strong {
+  color: #333;
+}
+
+.legal-link {
+  color: #A64B2A;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.legal-link:hover {
+  color: #F2A65A;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .legal-page {
+    padding: 30px 15px;
+  }
+  .legal-content {
+    padding: 25px;
+  }
+  .legal-content h1 {
+    font-size: 26px;
+  }
+  .legal-content h2 {
+    font-size: 18px;
+  }
+}
+/* Verified Tutor Badge (small, on cards) */
+.verified-badge {
+  display: inline-block;
+  background-color: #1DA1F2;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  text-align: center;
+  border-radius: 50%;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+/* Verified Tutor Badge (large, on profile page) */
+.verified-badge-large {
+  display: inline-block;
+  background-color: #1DA1F2;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  width: 26px;
+  height: 26px;
+  line-height: 26px;
+  text-align: center;
+  border-radius: 50%;
+  margin-left: 10px;
+  vertical-align: middle;
+}

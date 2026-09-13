@@ -1,13 +1,12 @@
 // src/pages/RegisterPage.tsx
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useLanguage } from '../context/useLanguage';
 
 type UserRole = 'learner' | 'tutor';
 
 function RegisterPage() {
-    const navigate = useNavigate();
     const { t } = useLanguage();
 
     const [role, setRole] = useState<UserRole>('learner');
@@ -22,6 +21,9 @@ function RegisterPage() {
 
     const [subjects, setSubjects] = useState('');
     const [experience, setExperience] = useState('');
+
+    // New state for the "check email" screen
+    const [isEmailSent, setIsEmailSent] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -62,14 +64,30 @@ function RegisterPage() {
             }
         }
 
-        // Sign them in immediately and take them to their dashboard
-        await supabase.auth.signInWithPassword({
-            email,
-            password,
-        });
-
-        navigate(role === 'learner' ? '/learner-dashboard' : '/tutor-dashboard');
+        // Instead of auto-login, show the "check your email" screen
+        setIsEmailSent(true);
     };
+
+    // Show "check your email" screen
+    if (isEmailSent) {
+        return (
+            <div className="auth-container">
+                <div className="auth-card">
+                    <h2>📧 Check Your Email</h2>
+                    <p>
+                        We've sent a confirmation link to <strong>{email}</strong>.
+                    </p>
+                    <p>
+                        Please click the link in your inbox to activate your account. Once confirmed, you can log in.
+                    </p>
+                    <p className="legal-text">
+                        Didn't get the email? Check your spam folder.
+                    </p>
+                    <Link to="/login" className="primary-btn auth-btn">Go to Log In</Link>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="auth-container">
@@ -186,7 +204,10 @@ function RegisterPage() {
                     </button>
 
                     <p className="legal-text">
-                        By continuing, you agree to TutorConnect’s Terms of Service and Privacy Policy,
+                        By continuing, you agree to TutorConnect's{' '}
+                        <Link to="/terms" className="legal-link">Terms of Service</Link>
+                        {' '}and{' '}
+                        <Link to="/privacy" className="legal-link">Privacy Policy</Link>,
                         and to receive periodic emails with updates.
                     </p>
                 </form>

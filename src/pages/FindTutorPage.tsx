@@ -10,6 +10,7 @@ interface Tutor {
     subjects: string[];
     province: string;
     whatsapp_number: string;
+    is_verified: boolean;
 }
 
 interface Rating {
@@ -37,15 +38,29 @@ function FindTutorPage() {
 
     useEffect(() => {
         const fetchTutors = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+
+            // Get the current user's blocked list
+            let blockedList: string[] = [];
+            if (user) {
+                const { data: profileData } = await supabase
+                    .from('profiles')
+                    .select('blocked_tutors')
+                    .eq('id', user.id)
+                    .single();
+                blockedList = profileData?.blocked_tutors || [];
+            }
+
             const { data, error } = await supabase
                 .from('profiles')
-                .select('id, full_name, subjects, province, whatsapp_number')
-                .eq('role', 'tutor');
+                .select('id, full_name, subjects, province, whatsapp_number, is_verified')                .eq('role', 'tutor');
 
             if (error) {
                 console.error("Error fetching tutors:", error);
             } else if (data) {
-                setTutors(data);
+                // Filter out blocked tutors
+                const filtered = data.filter(tutor => !blockedList.includes(tutor.id));
+                setTutors(filtered);
             }
 
             // Fetch ratings
@@ -168,8 +183,10 @@ function FindTutorPage() {
                             <div className="tutor-card" key={tutor.id}>
                                 {/* Profile Link */}
                                 <Link to={`/tutor/${tutor.id}`} className="tutor-name-link">
-                                    <h3>{tutor.full_name}</h3>
-                                </Link>
+                                    <h3>
+                                        {tutor.full_name}
+                                        {tutor.is_verified && <span className="verified-badge" title="Verified Tutor">✔</span>}
+                                    </h3>                                </Link>
                                 <p className="tutor-subject">📚 {tutor.subjects?.join(', ')}</p>
                                 <p className="tutor-location">📍 {tutor.province}</p>
 

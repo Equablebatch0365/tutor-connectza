@@ -9,10 +9,13 @@ import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import LearnerDashboard from './pages/LearnerDashboard';
+import TermsPage from './pages/TermsPage';
+import PrivacyPage from './pages/PrivacyPage';
 import TutorDashboard from './pages/TutorDashboard';
 import FindTutorPage from './pages/FindTutorPage';
 import TutorProfilePage from './pages/TutorProfilePage';
-import ResourcesPage from './pages/ResourcesPage'; // <-- Only ONE import now
+import ResourcesPage from './pages/ResourcesPage';
+// <-- Only ONE import now
 
 // Define a specific type for the user object
 interface UserType {
@@ -182,6 +185,8 @@ function App() {
                 <Route path="/find-tutor" element={<FindTutorPage />} />
                 <Route path="/tutor/:tutorId" element={<TutorProfilePage />} />
                 <Route path="/resources" element={<ResourcesPage />} />
+                <Route path="/terms" element={<TermsPage />} />
+                <Route path="/privacy" element={<PrivacyPage />} />
             </Routes>
         </div>
     );
