@@ -1,3 +1,4 @@
+import './lib/sentry'; // <-- ADD THIS AS THE FIRST LINE
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
