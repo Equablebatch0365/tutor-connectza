@@ -49,14 +49,42 @@ function LearnerDashboard() {
 
                 if (profileData) setProfile(profileData);
 
+                // 1. Fetch sessions
                 const { data: sessionsData } = await supabase
                     .from('sessions')
                     .select('*')
                     .eq('learner_id', user.id);
 
                 if (sessionsData) {
+                    const now = new Date();
+                    const validSessions = [];
+
+                    for (const session of sessionsData) {
+                        // Combine date and time (assuming format YYYY-MM-DD and HH:MM)
+                        const sessionDate = new Date(`${session.date}T${session.time}`);
+
+                        // CHECK EXPIRY: If session is pending/accepted and past the time
+                        if ((session.status === 'pending' || session.status === 'accepted') && sessionDate < now) {
+                            // Mark as expired in database
+                            await supabase.from('sessions').update({ status: 'expired' }).eq('id', session.id);
+                            session.status = 'expired';
+                        }
+
+                        // CHECK 24HR HIDE: If it's expired, only show it if the session was less than 24 hours ago
+                        if (session.status === 'expired') {
+                            const hoursSinceSession = (now.getTime() - sessionDate.getTime()) / (1000 * 60 * 60);
+                            if (hoursSinceSession > 24) {
+                                continue; // Skip this session entirely (don't add to validSessions)
+                            }
+                        }
+
+                        // Add to valid sessions
+                        validSessions.push(session);
+                    }
+
+                    // Fetch tutor names for valid sessions
                     const sessionsWithTutorNames = await Promise.all(
-                        sessionsData.map(async (session) => {
+                        validSessions.map(async (session) => {
                             const { data: tutorData } = await supabase
                                 .from('profiles')
                                 .select('full_name')
@@ -140,10 +168,12 @@ function LearnerDashboard() {
                                 <p>
                                     <strong>{t.statusLabel}:</strong>
                                     <span className={`status-${session.status}`}>
-                                        {session.status === 'pending' ? ' ⏳ ' + t.waitingTutor :
-                                            session.status === 'accepted' ? ' ✅ ' + t.accepted :
-                                                session.status === 'declined' ? ' ❌ ' + t.declined : session.status}
-                                    </span>
+    {session.status === 'pending' ? ' ⏳ ' + t.waitingTutor :
+        session.status === 'accepted' ? ' ✅ ' + t.accepted :
+            session.status === 'declined' ? ' ❌ ' + t.declined :
+                session.status === 'expired' ? ' ⏰ Expired' :
+                    session.status}
+</span>
                                 </p>
 
                                 {session.status === 'accepted' && (

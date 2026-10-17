@@ -29,13 +29,6 @@ function TutorDashboard() {
     const [sessionRequests, setSessionRequests] = useState<SessionRequest[]>([]);
     const [loading, setLoading] = useState(true);
 
-    // State for "Edit Profile"
-    const [whatsappNumber, setWhatsappNumber] = useState('');
-    const [experience, setExperience] = useState('');
-    const [bio, setBio] = useState('');
-    const [editError, setEditError] = useState('');
-    const [editSuccess, setEditSuccess] = useState(false);
-
     // State for "Respond to Session"
     const [respondingTo, setRespondingTo] = useState<SessionRequest | null>(null);
     const [meetingLink, setMeetingLink] = useState('');
@@ -53,12 +46,7 @@ function TutorDashboard() {
                     .eq('id', user.id)
                     .single();
 
-                if (profileData) {
-                    setProfile(profileData);
-                    setWhatsappNumber(profileData.whatsapp_number || '');
-                    setExperience(profileData.experience || '');
-                    setBio(profileData.bio || '');
-                }
+                if (profileData) setProfile(profileData);
 
                 const { data: sessionsData } = await supabase
                     .from('sessions')
@@ -70,30 +58,8 @@ function TutorDashboard() {
             setLoading(false);
         };
 
-        void fetchData();    }, []);
-
-    // Update Profile
-    const handleProfileUpdate = async () => {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return;
-
-        const { error } = await supabase
-            .from('profiles')
-            .update({
-                whatsapp_number: whatsappNumber,
-                experience: experience,
-                bio: bio
-            })
-            .eq('id', user.id);
-
-        if (error) {
-            setEditError(error.message);
-            return;
-        }
-
-        setEditSuccess(true);
-        setTimeout(() => setEditSuccess(false), 3000);
-    };
+        fetchData();
+    }, []);
 
     const openResponseModal = (session: SessionRequest) => {
         setRespondingTo(session);
@@ -156,6 +122,7 @@ function TutorDashboard() {
             </div>
 
             <div className="dash-grid">
+                {/* Sessions Card */}
                 <div className="dash-card">
                     <h3>📅 Session Requests</h3>
                     {sessionRequests.length > 0 ? (
@@ -168,8 +135,8 @@ function TutorDashboard() {
 
                                 {session.status === 'accepted' && (
                                     <div className="meeting-details">
-                                        {session.whatsapp_number && <p>💬 WhatsApp: <a href={`https://wa.me/${session.whatsapp_number}`} target="_blank">{session.whatsapp_number}</a></p>}
-                                        {session.meeting_link && <p>🔗 Link: <a href={session.meeting_link} target="_blank">Join Meeting</a></p>}
+                                        {session.whatsapp_number && <p>💬 WhatsApp: <a href={`https://wa.me/${session.whatsapp_number}`} target="_blank" rel="noopener noreferrer">{session.whatsapp_number}</a></p>}
+                                        {session.meeting_link && <p>🔗 Link: <a href={session.meeting_link} target="_blank" rel="noopener noreferrer">Join Meeting</a></p>}
                                     </div>
                                 )}
 
@@ -185,48 +152,22 @@ function TutorDashboard() {
                     )}
                 </div>
 
-                {/* EDIT PROFILE SECTION */}
-                <div className="dash-card">
-                    <h3>📝 Edit My Profile</h3>
-                    <p>Add your details so learners can see them and contact you.</p>
-
-                    <div className="form-group">
-                        <label>WhatsApp Number (e.g., 27821234567)</label>
-                        <input
-                            type="text"
-                            placeholder="e.g. 27821234567"
-                            value={whatsappNumber}
-                            onChange={(e) => setWhatsappNumber(e.target.value)}
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label>Years of Experience</label>
-                        <input
-                            type="number"
-                            placeholder="e.g. 3"
-                            value={experience}
-                            onChange={(e) => setExperience(e.target.value)}
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label>Short Bio</label>
-                        <textarea
-                            rows={3}
-                            placeholder="e.g. I am a passionate Maths tutor with 5 years of experience..."
-                            value={bio}
-                            onChange={(e) => setBio(e.target.value)}
-                        />
-                    </div>
-
-                    {editError && <p className="error-text">{editError}</p>}
-                    {editSuccess && <p className="success-text">✅ Profile updated!</p>}
-
-                    <button className="primary-btn small-btn" onClick={handleProfileUpdate}>
-                        Save Profile
-                    </button>
+                {/* Earnings Card */}
+                <div className="dash-card earnings-card">
+                    <h3>💰 Earnings (This Month)</h3>
+                    <p className="earnings-number">R0.00</p>
+                    <p className="earnings-sub">Payouts will be available once payment integration is live.</p>
                 </div>
+            </div>
+
+            {/* NEW: Clean Dashboard Actions */}
+            <div className="dashboard-actions">
+                <Link to="/tutor-profile-edit" className="primary-btn back-btn">
+                    ✏️ Edit My Profile & Banking Details
+                </Link>
+                <Link to="/" className="secondary-btn back-btn">
+                    Back to Home
+                </Link>
             </div>
 
             {/* RESPONSE MODAL */}
@@ -265,8 +206,6 @@ function TutorDashboard() {
                     </div>
                 </div>
             )}
-
-            <Link to="/" className="secondary-btn back-btn">Back to Home</Link>
         </div>
     );
 }

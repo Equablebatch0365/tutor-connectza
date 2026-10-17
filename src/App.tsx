@@ -5,6 +5,9 @@ import { supabase } from './lib/supabase';
 import { useLanguage } from './context/useLanguage';
 import type { Language } from './context/LanguageContext';
 import LearnerProfilePage from './pages/LearnerProfilePage';
+import TutorProfileEditPage from './pages/TutorProfileEditPage';
+import Footer from './components/Footer';
+import MotivationPopup from './components/MotivationPopup';
 
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
@@ -189,6 +192,9 @@ function App() {
                 <Route path="/terms" element={<TermsPage />} />
                 <Route path="/privacy" element={<PrivacyPage />} />
                 <Route path="/learner-profile" element={<LearnerProfilePage />} />
+                <Route path="/tutor-profile-edit" element={<TutorProfileEditPage />} />
+                <Route path="/footer" element={<Footer />} />
+                <Route path="/motivation-popup" element={<MotivationPopup />} />
             </Routes>
         </div>
     );

@@ -1617,3 +1617,204 @@ body {
         text-align: center;
     }
 }
+/* Section headings in profile edit */
+.section-heading {
+    color: #A64B2A;
+    font-size: 18px;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #FDF0E7;
+}
+
+.section-note {
+    color: #888;
+    font-size: 13px;
+    margin-bottom: 15px;
+    font-style: italic;
+}
+
+/* Textarea in profile edit */
+.profile-edit-card textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #E8DCCB;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+    outline: none;
+    font-family: inherit;
+    resize: vertical;
+}
+
+.profile-edit-card textarea:focus {
+    border-color: #A64B2A;
+}
+
+/* Dashboard action buttons (already added, but ensure it's there) */
+.dashboard-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #E8DCCB;
+}
+
+@media (max-width: 768px) {
+    .dashboard-actions {
+        flex-direction: column;
+    }
+    .dashboard-actions .primary-btn,
+    .dashboard-actions .secondary-btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+/* =========================================
+   FOOTER
+   ========================================= */
+.site-footer {
+    background-color: #3A2A22; /* Deep brown, matching the hero text */
+    color: #FDFBF7;
+    padding: 60px 40px 20px;
+    margin-top: auto;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 40px;
+    max-width: 1000px;
+    margin: 0 auto 40px;
+}
+
+.footer-logo {
+    font-size: 24px;
+    font-weight: 800;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.footer-logo span {
+    color: #F2A65A;
+}
+
+.footer-mission {
+    color: #B0A39B;
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 300px;
+}
+
+.footer-col h4 {
+    color: #F2A65A;
+    font-size: 16px;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.footer-col a {
+    display: block;
+    color: #D1C8C3;
+    text-decoration: none;
+    margin-bottom: 10px;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.footer-col a:hover {
+    color: #FFFFFF;
+}
+
+.footer-bottom {
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 20px;
+    color: #888;
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* Mobile Footer */
+@media (max-width: 768px) {
+    .site-footer {
+        padding: 40px 20px 20px;
+    }
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    .footer-bottom {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+/* =========================================
+   MOTIVATION POPUP
+   ========================================= */
+.popup-overlay {
+    z-index: 9999; /* Ensure it's above everything */
+}
+
+.motivation-popup {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    border: 2px solid #F2A65A;
+    animation: popIn 0.3s ease-out;
+}
+
+@keyframes popIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.popup-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #999;
+    cursor: pointer;
+}
+
+.popup-close:hover {
+    color: #333;
+}
+
+.popup-icon {
+    font-size: 50px;
+    margin-bottom: 15px;
+}
+
+.motivation-popup h2 {
+    color: #A64B2A;
+    margin-top: 0;
+    font-size: 24px;
+}
+
+.quote-text {
+    font-size: 18px;
+    font-style: italic;
+    color: #333;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.quote-author {
+    font-weight: bold;
+    color: #888;
+    margin-bottom: 25px;
+    font-size: 14px;
+}
