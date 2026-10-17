@@ -140,16 +140,16 @@ function LearnerDashboard() {
                                 <p>
                                     <strong>{t.statusLabel}:</strong>
                                     <span className={`status-${session.status}`}>
-                    {session.status === 'pending' ? ' ⏳ ' + t.waitingTutor :
-                        session.status === 'accepted' ? ' ✅ ' + t.accepted :
-                            session.status === 'declined' ? ' ❌ ' + t.declined : session.status}
-                  </span>
+                                        {session.status === 'pending' ? ' ⏳ ' + t.waitingTutor :
+                                            session.status === 'accepted' ? ' ✅ ' + t.accepted :
+                                                session.status === 'declined' ? ' ❌ ' + t.declined : session.status}
+                                    </span>
                                 </p>
 
                                 {session.status === 'accepted' && (
                                     <div className="meeting-details">
-                                        {session.whatsapp_number && <p>💬 WhatsApp: <a href={`https://wa.me/${session.whatsapp_number}`} target="_blank">{t.chatWhatsApp}</a></p>}
-                                        {session.meeting_link && <p>🔗 Link: <a href={session.meeting_link} target="_blank">{t.joinMeeting}</a></p>}
+                                        {session.whatsapp_number && <p>💬 WhatsApp: <a href={`https://wa.me/${session.whatsapp_number}`} target="_blank" rel="noopener noreferrer">{t.chatWhatsApp}</a></p>}
+                                        {session.meeting_link && <p>🔗 Link: <a href={session.meeting_link} target="_blank" rel="noopener noreferrer">{t.joinMeeting}</a></p>}
                                     </div>
                                 )}
 
@@ -192,8 +192,8 @@ function LearnerDashboard() {
                                                     className={star <= rating ? 'star-filled' : 'star-empty'}
                                                     onClick={() => setRating(star)}
                                                 >
-                          ★
-                        </span>
+                                                    ★
+                                                </span>
                                             ))}
                                         </div>
                                     </div>
@@ -219,7 +219,15 @@ function LearnerDashboard() {
                 </div>
             )}
 
-            <Link to="/find-tutor" className="primary-btn back-btn">{t.findTutorBtn}</Link>
+            {/* Profile & Find Tutor Buttons */}
+            <div className="dashboard-actions">
+                <Link to="/learner-profile" className="secondary-btn back-btn">
+                    ✏️ Edit My Profile
+                </Link>
+                <Link to="/find-tutor" className="primary-btn back-btn">
+                    {t.findTutorBtn}
+                </Link>
+            </div>
         </div>
     );
 }

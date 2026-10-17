@@ -4,6 +4,7 @@ import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { supabase } from './lib/supabase';
 import { useLanguage } from './context/useLanguage';
 import type { Language } from './context/LanguageContext';
+import LearnerProfilePage from './pages/LearnerProfilePage';
 
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
@@ -187,6 +188,7 @@ function App() {
                 <Route path="/resources" element={<ResourcesPage />} />
                 <Route path="/terms" element={<TermsPage />} />
                 <Route path="/privacy" element={<PrivacyPage />} />
+                <Route path="/learner-profile" element={<LearnerProfilePage />} />
             </Routes>
         </div>
     );
