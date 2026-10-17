@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { useLanguage } from '../context/useLanguage';
+
 
 // All SA curriculum subjects (NSC)
 const SA_SUBJECTS = [
@@ -47,7 +47,6 @@ interface LearnerProfile {
 
 function LearnerProfilePage() {
     const navigate = useNavigate();
-    const { t } = useLanguage();
 
     const [profile, setProfile] = useState<LearnerProfile | null>(null);
     const [fullName, setFullName] = useState('');
