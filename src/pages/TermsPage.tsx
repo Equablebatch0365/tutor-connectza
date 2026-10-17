@@ -6,66 +6,46 @@ function TermsPage() {
         <div className="legal-page">
             <div className="legal-content">
                 <h1>Terms of Service</h1>
-                <p className="legal-updated">Last updated: September 2026</p>
+                <p className="legal-updated">Last updated: October 2026</p>
 
                 <h2>1. Introduction</h2>
                 <p>
-                    Welcome to TutorConnect ("we", "us", "our"). By accessing or using our platform, you agree to be bound by these Terms of Service. If you do not agree with any part of these terms, please do not use our services.
+                    Welcome to TutorConnect. By using our platform, you agree to these Terms. This agreement is governed by South African law, including the <strong>Consumer Protection Act 68 of 2008 (CPA)</strong> and the <strong>Electronic Communications and Transactions Act 25 of 2002 (ECTA)</strong>.
                 </p>
 
-                <h2>2. Who Can Use TutorConnect</h2>
+                <h2>2. Eligibility</h2>
                 <p>
-                    TutorConnect is designed for South African learners (Grade 10–12) and tutors. You must be at least 13 years old to create an account. If you are under 18, you must have permission from a parent or guardian.
+                    You must be at least 13 years old to use TutorConnect. If you are under 18, you may only use the platform with the consent of a parent or guardian.
                 </p>
 
-                <h2>3. User Accounts</h2>
+                <h2>3. The Service</h2>
                 <p>
-                    You are responsible for maintaining the confidentiality of your account credentials. You agree to provide accurate information during registration and to keep it up to date. Impersonating another person is strictly prohibited.
+                    TutorConnect is a platform that connects learners with independent tutors. We are not a party to the agreement between the learner and the tutor. Tutors are independent contractors, not employees of TutorConnect.
                 </p>
 
-                <h2>4. Tutor Responsibilities</h2>
+                <h2>4. Payments (Manual EFT)</h2>
                 <p>
-                    Tutors on TutorConnect agree to provide honest, accurate information about their qualifications, experience, and subjects. Tutors must treat all learners with respect and professionalism.
+                    Payments are arranged directly between learners and tutors via EFT. TutorConnect does not process payments and is not responsible for refunds or payment disputes. Learners are responsible for paying the agreed rate.
                 </p>
 
-                <h2>5. Learner Responsibilities</h2>
+                <h2>5. Tutor Verification</h2>
                 <p>
-                    Learners agree to attend booked sessions, treat tutors with respect, and make payments where applicable. Abuse of the platform will result in account suspension.
+                    While we manually verify tutors to the best of our ability, TutorConnect does not guarantee the qualifications or conduct of any tutor. Learners (or their guardians) are responsible for their own safety and should exercise caution.
                 </p>
 
-                <h2>6. Payments</h2>
+                <h2>6. User Conduct</h2>
                 <p>
-                    Payment terms are arranged directly between learners and tutors. TutorConnect is not responsible for payment disputes but will assist where possible. Payment integration is planned for a future release.
+                    You agree not to harass, abuse, or defraud other users. We reserve the right to suspend or terminate accounts that violate these terms.
                 </p>
 
-                <h2>7. Prohibited Conduct</h2>
-                <p>You may not:</p>
-                <ul>
-                    <li>Harass, threaten, or abuse other users</li>
-                    <li>Post false or misleading information</li>
-                    <li>Use the platform for illegal activities</li>
-                    <li>Share your account with others</li>
-                    <li>Attempt to hack, scrape, or damage the platform</li>
-                </ul>
-
-                <h2>8. Reporting and Blocking</h2>
+                <h2>7. Limitation of Liability</h2>
                 <p>
-                    We take user safety seriously. Learners can report or block tutors who violate these terms. Reports are reviewed and may result in suspension or removal.
+                    To the maximum extent permitted by law, TutorConnect is not liable for any indirect or consequential damages arising from the use of our platform.
                 </p>
 
-                <h2>9. Limitation of Liability</h2>
+                <h2>8. Contact</h2>
                 <p>
-                    TutorConnect connects learners and tutors but is not a party to any agreement between them. We are not liable for the outcome of any session, the conduct of any user, or any damages arising from the use of our platform.
-                </p>
-
-                <h2>10. Changes to These Terms</h2>
-                <p>
-                    We may update these terms from time to time. Continued use of the platform after changes constitutes acceptance of the new terms.
-                </p>
-
-                <h2>11. Contact Us</h2>
-                <p>
-                    For questions about these terms, contact us at <strong>support@tutorconnect.co.za</strong>.
+                    For legal inquiries, contact <strong>legal@tutorconnect.co.za</strong>.
                 </p>
 
                 <Link to="/" className="secondary-btn back-btn">← Back to Home</Link>
