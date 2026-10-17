@@ -193,9 +193,9 @@ function App() {
                 <Route path="/privacy" element={<PrivacyPage />} />
                 <Route path="/learner-profile" element={<LearnerProfilePage />} />
                 <Route path="/tutor-profile-edit" element={<TutorProfileEditPage />} />
-                <Route path="/footer" element={<Footer />} />
-                <Route path="/motivation-popup" element={<MotivationPopup />} />
             </Routes>
+            <MotivationPopup />
+            <Footer />
         </div>
     );
 }
